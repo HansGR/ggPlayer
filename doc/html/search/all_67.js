@@ -1,0 +1,24 @@
+var searchData=
+[
+  ['boardgame',['boardgame',['../namespacegg__arch_1_1boardgame.html',1,'gg_arch']]],
+  ['chess',['chess',['../namespacegg__arch_1_1chess.html',1,'gg_arch']]],
+  ['game',['game',['../classgg_player_1_1_game_canvas.html#a6bdab1f0c4b24247652cbe9fb4cff376',1,'ggPlayer.GameCanvas.game()'],['../namespacegg_player.html#a8fdb2fa9bacc3b4e36bf435bf96fa8a5',1,'ggPlayer.game()']]],
+  ['gamecanvas',['GameCanvas',['../classgg_player_1_1_game_canvas.html',1,'ggPlayer']]],
+  ['gamecell',['gameCell',['../classgg__arch_1_1gamecell_1_1game_cell.html',1,'gg_arch::gamecell']]],
+  ['gamecell',['gamecell',['../namespacegg__arch_1_1gamecell.html',1,'gg_arch']]],
+  ['gamecell_2epy',['gamecell.py',['../gamecell_8py.html',1,'']]],
+  ['gamepiece',['gamepiece',['../namespacegg__arch_1_1gamepiece.html',1,'gg_arch']]],
+  ['gamepiece',['Gamepiece',['../classgg__arch_1_1gamepiece_1_1_gamepiece.html',1,'gg_arch::gamepiece']]],
+  ['gamepiece_2epy',['gamepiece.py',['../gamepiece_8py.html',1,'']]],
+  ['gametype',['gametype',['../classgg_player_1_1_game_canvas.html#a383c5decaed718ccdaccba538aba8194',1,'ggPlayer::GameCanvas']]],
+  ['getboard',['getBoard',['../classgg__arch_1_1boardgame_1_1_boardgame.html#a241fc5e6df46e0a3b91214730e5ca7ca',1,'gg_arch::boardgame::Boardgame']]],
+  ['getcellindex',['getCellIndex',['../classgg__arch_1_1boardgame_1_1_boardgame.html#a7918e8105d6d6978eb8b6b9f7a2aacf7',1,'gg_arch::boardgame::Boardgame']]],
+  ['gethistory',['getHistory',['../classgg__arch_1_1boardgame_1_1_boardgame.html#ad09b9d93abd9c2ddbfb8f30cd3ba024f',1,'gg_arch::boardgame::Boardgame']]],
+  ['getpath',['getPath',['../classgg__arch_1_1gamecell_1_1game_cell.html#a9e3e51533b4e4c218d0797594eca21bc',1,'gg_arch::gamecell::gameCell']]],
+  ['getpos',['getPos',['../classgg__arch_1_1gamecell_1_1game_cell.html#a871fbb9dac6b5417d36bcf5d67ff7450',1,'gg_arch::gamecell::gameCell']]],
+  ['getsize',['getSize',['../classgg__arch_1_1gamecell_1_1game_cell.html#af252d35279981de75c47dd5ba9c71a63',1,'gg_arch::gamecell::gameCell']]],
+  ['gg_5farch',['gg_arch',['../namespacegg__arch.html',1,'']]],
+  ['ggplayer',['ggPlayer',['../namespacegg_player.html',1,'']]],
+  ['ggplayer_2epy',['ggPlayer.py',['../gg_player_8py.html',1,'']]],
+  ['greet',['greet',['../namespacegg_player.html#a8625ebffbbbccde750eaed3160e90a80',1,'ggPlayer']]]
+];
