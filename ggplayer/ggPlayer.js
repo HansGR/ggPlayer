@@ -14,10 +14,13 @@ $pyjs.loaded_modules['ggPlayer'] = function (__mod_name__) {
 	$m['RootPanelCls'] = $p['___import___']('pyjamas.ui.RootPanel.RootPanelCls', null, null, false);
 	$m['manageRootPanel'] = $p['___import___']('pyjamas.ui.RootPanel.manageRootPanel', null, null, false);
 	$m['Button'] = $p['___import___']('pyjamas.ui.Button.Button', null, null, false);
+	$m['TextBox'] = $p['___import___']('pyjamas.ui.TextBox.TextBox', null, null, false);
 	$m['HTML'] = $p['___import___']('pyjamas.ui.HTML.HTML', null, null, false);
 	$m['Label'] = $p['___import___']('pyjamas.ui.Label.Label', null, null, false);
 	$m['FocusPanel'] = $p['___import___']('pyjamas.ui.FocusPanel.FocusPanel', null, null, false);
 	$m['DockPanel'] = $p['___import___']('pyjamas.ui.DockPanel.DockPanel', null, null, false);
+	$m['HorizontalPanel'] = $p['___import___']('pyjamas.ui.HorizontalPanel.HorizontalPanel', null, null, false);
+	$m['VerticalPanel'] = $p['___import___']('pyjamas.ui.VerticalPanel.VerticalPanel', null, null, false);
 	$m['HasAlignment'] = $p['___import___']('pyjamas.ui.HasAlignment', null, null, false);
 	$m['HTML'] = $p['___import___']('pyjamas.ui.HTML.HTML', null, null, false);
 	$m['Label'] = $p['___import___']('pyjamas.ui.Label.Label', null, null, false);
@@ -43,8 +46,10 @@ $pyjs.loaded_modules['ggPlayer'] = function (__mod_name__) {
 	$m['Chess'] = $p['___import___']('chess.Chess', null, null, false);
 	$m['BOARDWIDTH'] = 600;
 	$m['BOARDHEIGHT'] = 600;
+	$m['GAMENAME'] = 'Chess';
 	$m['LIGHT'] = $m['Color']['Color']('#FDE6BE');
 	$m['DARK'] = $m['Color']['Color']('#695532');
+	$m['COLORS'] = $p['list']([$m['LIGHT'], $m['DARK']]);
 	$m['GameCanvas'] = (function(){
 		var $cls_definition = new Object();
 		var $method;
@@ -149,60 +154,63 @@ $pyjs.loaded_modules['ggPlayer'] = function (__mod_name__) {
 			} else {
 				var self = arguments[0];
 			}
-			var $iter2_nextval,$iter2_type,$iter2_iter,i,$iter2_idx,$iter2_array;
-			$iter2_iter = self['game']['board']['keys']();
+			var $iter2_nextval,$iter2_type,$iter2_iter,cell,$iter2_idx,$iter2_array;
+			$iter2_iter = self['game']['board']['values']();
 			$iter2_nextval=$p['__iter_prepare']($iter2_iter,false);
 			while (typeof($p['__wrapped_next']($iter2_nextval).$nextval) != 'undefined') {
-				i = $iter2_nextval.$nextval;
-				self['drawCell'](i, $p['list']([$m['LIGHT'], $m['DARK']]));
+				cell = $iter2_nextval.$nextval;
+				self['drawCell'](cell, $m['COLORS']);
 			}
 			return null;
 		}
 	, 1, [null,null,['self']]);
 		$cls_definition['drawBoard'] = $method;
-		$method = $pyjs__bind_method2('drawCell', function(cell, colors) {
+		$method = $pyjs__bind_method2('drawCell', function(gamecell, colors) {
 			if (this.__is_instance__ === true) {
 				var self = this;
 			} else {
 				var self = arguments[0];
-				cell = arguments[1];
+				gamecell = arguments[1];
 				colors = arguments[2];
 			}
-			var xi,$add12,x1,$iter3_type,x2,$mul6,y1,y2,$iter3_idx,r,$iter3_iter,yi,$mul8,$add13,$add10,$add11,$mul9,$iter3_array,$mul7,path,$mul5,$mul4,$mul3,$mul2,$mul1,$add14,$mul14,$mul13,$mul12,$mul11,$mul10,j,pathtype,$add2,$add3,$add1,$add6,$add7,$add4,$add5,$add8,$add9,$iter3_nextval;
-			var $tupleassign1 = $p['__ass_unpack']($p['getattr']($p['getattr'](self, 'game'), 'board').__getitem__(cell)['getPath'](), 2, null);
+			var xi,$iter4_type,y1,y2,$iter4_iter,$iter4_idx,r,yi,$add14,$add10,$add11,$add12,$add13,x2,path,x1,$iter4_nextval,j,pathtype,$add2,$add3,$add1,$add6,$add7,$add4,$add5,$iter4_array,$add8,$add9;
+			var $tupleassign1 = $p['__ass_unpack'](gamecell['getPath'](), 2, null);
 			path = $tupleassign1[0];
 			pathtype = $tupleassign1[1];
-			self['beginPath']();
-			self['moveTo'](path.__getitem__(0).__getitem__(0), path.__getitem__(0).__getitem__(1));
-			$iter3_iter = $p['range']($p['len'](pathtype));
+			path = function(){
+				var a,$iter3_idx,$iter3_nextval,$iter3_type,$collcomp1,b,$iter3_iter,$iter3_array,$mul4,$mul3,$mul2,$mul1;
+	$collcomp1 = $p['list']();
+			$iter3_iter = path;
 			$iter3_nextval=$p['__iter_prepare']($iter3_iter,false);
 			while (typeof($p['__wrapped_next']($iter3_nextval).$nextval) != 'undefined') {
-				j = $iter3_nextval.$nextval;
+				var $tupleassign2 = $p['__ass_unpack']($iter3_nextval.$nextval, 2, null);
+				a = $tupleassign2[0];
+				b = $tupleassign2[1];
+				$collcomp1['append']($p['list']([(typeof ($mul1=a)==typeof ($mul2=$p['getattr'](self, 'width')) && typeof $mul1=='number'?
+					$mul1*$mul2:
+					$p['op_mul']($mul1,$mul2)), (typeof ($mul3=b)==typeof ($mul4=$p['getattr'](self, 'height')) && typeof $mul3=='number'?
+					$mul3*$mul4:
+					$p['op_mul']($mul3,$mul4))]));
+			}
+
+	return $collcomp1;}();
+			self['beginPath']();
+			self['moveTo'](path.__getitem__(0).__getitem__(0), path.__getitem__(0).__getitem__(1));
+			$iter4_iter = $p['range']($p['len'](pathtype));
+			$iter4_nextval=$p['__iter_prepare']($iter4_iter,false);
+			while (typeof($p['__wrapped_next']($iter4_nextval).$nextval) != 'undefined') {
+				j = $iter4_nextval.$nextval;
 				if ($p['bool']($p['op_eq'](pathtype.__getitem__(j), 'line'))) {
-					xi = $p['float_int']((typeof ($mul1=path.__getitem__($p['__op_add']($add1=j,$add2=1)).__getitem__(0))==typeof ($mul2=$p['getattr'](self, 'width')) && typeof $mul1=='number'?
-						$mul1*$mul2:
-						$p['op_mul']($mul1,$mul2)));
-					yi = $p['float_int']((typeof ($mul3=path.__getitem__($p['__op_add']($add3=j,$add4=1)).__getitem__(1))==typeof ($mul4=$p['getattr'](self, 'height')) && typeof $mul3=='number'?
-						$mul3*$mul4:
-						$p['op_mul']($mul3,$mul4)));
+					xi = $p['float_int'](path.__getitem__($p['__op_add']($add1=j,$add2=1)).__getitem__(0));
+					yi = $p['float_int'](path.__getitem__($p['__op_add']($add3=j,$add4=1)).__getitem__(1));
 					self['lineTo'](xi, yi);
 				}
 				else if ($p['bool']($p['op_eq'](pathtype.__getitem__(j), 'arc'))) {
-					x1 = $p['float_int']((typeof ($mul5=path.__getitem__($p['__op_add']($add5=j,$add6=1)).__getitem__(0))==typeof ($mul6=$p['getattr'](self, 'width')) && typeof $mul5=='number'?
-						$mul5*$mul6:
-						$p['op_mul']($mul5,$mul6)));
-					y1 = $p['float_int']((typeof ($mul7=path.__getitem__($p['__op_add']($add7=j,$add8=1)).__getitem__(1))==typeof ($mul8=$p['getattr'](self, 'height')) && typeof $mul7=='number'?
-						$mul7*$mul8:
-						$p['op_mul']($mul7,$mul8)));
-					x2 = $p['float_int']((typeof ($mul9=path.__getitem__($p['__op_add']($add9=j,$add10=1)).__getitem__(2))==typeof ($mul10=$p['getattr'](self, 'width')) && typeof $mul9=='number'?
-						$mul9*$mul10:
-						$p['op_mul']($mul9,$mul10)));
-					y2 = $p['float_int']((typeof ($mul11=path.__getitem__($p['__op_add']($add11=j,$add12=1)).__getitem__(3))==typeof ($mul12=$p['getattr'](self, 'height')) && typeof $mul11=='number'?
-						$mul11*$mul12:
-						$p['op_mul']($mul11,$mul12)));
-					r = $p['float_int']((typeof ($mul13=path.__getitem__($p['__op_add']($add13=j,$add14=1)).__getitem__(4))==typeof ($mul14=$p['getattr'](self, 'width')) && typeof $mul13=='number'?
-						$mul13*$mul14:
-						$p['op_mul']($mul13,$mul14)));
+					x1 = $p['float_int'](path.__getitem__($p['__op_add']($add5=j,$add6=1)).__getitem__(0));
+					y1 = $p['float_int'](path.__getitem__($p['__op_add']($add7=j,$add8=1)).__getitem__(1));
+					x2 = $p['float_int'](path.__getitem__($p['__op_add']($add9=j,$add10=1)).__getitem__(2));
+					y2 = $p['float_int'](path.__getitem__($p['__op_add']($add11=j,$add12=1)).__getitem__(3));
+					r = $p['float_int'](path.__getitem__($p['__op_add']($add13=j,$add14=1)).__getitem__(4));
 					self['arcTo'](x1, y1, x2, y2, r);
 				}
 				else if ($p['bool']($p['op_eq'](pathtype.__getitem__(j), 'quad'))) {
@@ -213,11 +221,11 @@ $pyjs.loaded_modules['ggPlayer'] = function (__mod_name__) {
 				}
 			}
 			self['closePath']();
-			self['setFillStyle'](colors.__getitem__($p['getattr']($p['getattr']($p['getattr'](self, 'game'), 'board').__getitem__(cell), 'color')));
+			self['setFillStyle'](colors.__getitem__($p['getattr'](gamecell, 'color')));
 			self['fill']();
 			return null;
 		}
-	, 1, [null,null,['self'],['cell'],['colors']]);
+	, 1, [null,null,['self'],['gamecell'],['colors']]);
 		$cls_definition['drawCell'] = $method;
 		$method = $pyjs__bind_method2('initPieces', function() {
 			if (this.__is_instance__ === true) {
@@ -225,13 +233,16 @@ $pyjs.loaded_modules['ggPlayer'] = function (__mod_name__) {
 			} else {
 				var self = arguments[0];
 			}
-			var i,$iter4_nextval,$iter4_idx,$iter4_type,$iter4_array,$iter4_iter;
-			$iter4_iter = self['game']['state']['keys']();
-			$iter4_nextval=$p['__iter_prepare']($iter4_iter,false);
-			while (typeof($p['__wrapped_next']($iter4_nextval).$nextval) != 'undefined') {
-				i = $iter4_nextval.$nextval;
-				if ($p['bool'](!$p['op_eq']($p['getattr']($p['getattr'](self, 'game'), 'state').__getitem__(i), 'none'))) {
-					self['drawPiece']($p['getattr']($p['getattr'](self, 'game'), 'pieces').__getitem__($p['getattr']($p['getattr'](self, 'game'), 'state').__getitem__(i)), $p['getattr']($p['getattr'](self, 'game'), 'board').__getitem__(i));
+			var $iter5_nextval,$iter6_idx,i,$iter5_idx,j,$iter6_type,$iter6_array,$iter5_iter,$iter5_array,$iter5_type,$iter6_iter,$iter6_nextval;
+			$iter5_iter = self['game']['board']['keys']();
+			$iter5_nextval=$p['__iter_prepare']($iter5_iter,false);
+			while (typeof($p['__wrapped_next']($iter5_nextval).$nextval) != 'undefined') {
+				i = $iter5_nextval.$nextval;
+				$iter6_iter = $p['getattr']($p['getattr'](self, 'game'), 'state').__getitem__(i);
+				$iter6_nextval=$p['__iter_prepare']($iter6_iter,false);
+				while (typeof($p['__wrapped_next']($iter6_nextval).$nextval) != 'undefined') {
+					j = $iter6_nextval.$nextval;
+					self['drawPiece']($p['getattr']($p['getattr'](self, 'game'), 'pieces').__getitem__(j), $p['getattr']($p['getattr'](self, 'game'), 'board').__getitem__(i));
 				}
 			}
 			return null;
@@ -246,26 +257,26 @@ $pyjs.loaded_modules['ggPlayer'] = function (__mod_name__) {
 				gamepiece = arguments[1];
 				cell = arguments[2];
 			}
-			var yi,$mul16,$mul15,xi,img,h,wi,$mul18,$mul17,hi,$mul19,w,y,x,$mul22,$mul20,$mul21;
-			img = $p['getattr'](self, 'img_dict').__getitem__($p['getattr'](gamepiece, 'Player')).__getitem__($p['getattr'](gamepiece, 'Name'));
-			var $tupleassign2 = $p['__ass_unpack'](cell['getPos'](), 2, null);
-			xi = $tupleassign2[0];
-			yi = $tupleassign2[1];
-			x = $p['float_int']((typeof ($mul15=xi)==typeof ($mul16=$p['getattr'](self, 'width')) && typeof $mul15=='number'?
-				$mul15*$mul16:
-				$p['op_mul']($mul15,$mul16)));
-			y = $p['float_int']((typeof ($mul17=yi)==typeof ($mul18=$p['getattr'](self, 'height')) && typeof $mul17=='number'?
-				$mul17*$mul18:
-				$p['op_mul']($mul17,$mul18)));
-			var $tupleassign3 = $p['__ass_unpack'](cell['getSize'](), 2, null);
-			wi = $tupleassign3[0];
-			hi = $tupleassign3[1];
-			w = $p['float_int']((typeof ($mul19=wi)==typeof ($mul20=$p['getattr'](self, 'width')) && typeof $mul19=='number'?
-				$mul19*$mul20:
-				$p['op_mul']($mul19,$mul20)));
-			h = $p['float_int']((typeof ($mul21=wi)==typeof ($mul22=$p['getattr'](self, 'height')) && typeof $mul21=='number'?
-				$mul21*$mul22:
-				$p['op_mul']($mul21,$mul22)));
+			var yi,$mul11,xi,w,img,$mul10,h,$mul8,wi,y,hi,$mul9,x,$mul7,$mul6,$mul5,$mul12;
+			img = $p['getattr'](self, 'img_dict').__getitem__($p['getattr'](gamepiece, 'player')).__getitem__($p['getattr'](gamepiece, '$$name'));
+			var $tupleassign3 = $p['__ass_unpack'](cell['getPos'](), 2, null);
+			xi = $tupleassign3[0];
+			yi = $tupleassign3[1];
+			x = $p['float_int']((typeof ($mul5=xi)==typeof ($mul6=$p['getattr'](self, 'width')) && typeof $mul5=='number'?
+				$mul5*$mul6:
+				$p['op_mul']($mul5,$mul6)));
+			y = $p['float_int']((typeof ($mul7=yi)==typeof ($mul8=$p['getattr'](self, 'height')) && typeof $mul7=='number'?
+				$mul7*$mul8:
+				$p['op_mul']($mul7,$mul8)));
+			var $tupleassign4 = $p['__ass_unpack'](cell['getSize'](), 2, null);
+			wi = $tupleassign4[0];
+			hi = $tupleassign4[1];
+			w = $p['float_int']((typeof ($mul9=wi)==typeof ($mul10=$p['getattr'](self, 'width')) && typeof $mul9=='number'?
+				$mul9*$mul10:
+				$p['op_mul']($mul9,$mul10)));
+			h = $p['float_int']((typeof ($mul11=wi)==typeof ($mul12=$p['getattr'](self, 'height')) && typeof $mul11=='number'?
+				$mul11*$mul12:
+				$p['op_mul']($mul11,$mul12)));
 			self['drawImage'](img, 0, 0, 45, 45, x, y, w, h);
 			return null;
 		}
@@ -276,22 +287,83 @@ $pyjs.loaded_modules['ggPlayer'] = function (__mod_name__) {
 		for (var $item in $cls_definition) { $data.__setitem__($item, $cls_definition[$item]); }
 		return $p['_create_class']('GameCanvas', $p['tuple']($bases), $data);
 	})();
-	$m['greet'] = function(fred) {
+	$m['GamePlayer'] = (function(){
+		var $cls_definition = new Object();
+		var $method;
+		$cls_definition.__module__ = 'ggPlayer';
+		$method = $pyjs__bind_method2('__init__', function(width, height, gametype) {
+			if (this.__is_instance__ === true) {
+				var self = this;
+			} else {
+				var self = arguments[0];
+				width = arguments[1];
+				height = arguments[2];
+				gametype = arguments[3];
+			}
 
-		fred['setText']('thanks for playing!');
-		$m['Window']['alert']('Test run!');
-		return null;
-	};
-	$m['greet'].__name__ = 'greet';
-
-	$m['greet'].__bind_type__ = 0;
-	$m['greet'].__args__ = [null,null,['fred']];
+			$pyjs_kwargs_call($m['DockPanel'], '__init__', null, null, [{HorizontalAlignment:$p['getattr']($m['HasAlignment'], 'ALIGN_CENTER'), Spacing:10}, self]);
+			self.GC = $m['GameCanvas'](width, height, gametype);
+			self.b = $pyjs_kwargs_call(null, $m['Button'], null, null, [{StyleName:'teststyle'}, 'Make Move', self]);
+			self.cell1 = $pyjs_kwargs_call(null, $m['TextBox'], null, null, [{StyleName:'boxStyle'}]);
+			self.cell2 = $pyjs_kwargs_call(null, $m['TextBox'], null, null, [{StyleName:'boxStyle'}]);
+			self.cellPanel = $pyjs_kwargs_call(null, $m['HorizontalPanel'], null, null, [{VerticalAlignment:$p['getattr']($m['HasAlignment'], 'ALIGN_MIDDLE')}]);
+			self['cellPanel']['add']($p['getattr'](self, 'cell1'));
+			self['cellPanel']['add']($p['getattr'](self, 'cell2'));
+			self.mover = $pyjs_kwargs_call(null, $m['VerticalPanel'], null, null, [{HorizontalAlignment:$p['getattr']($m['HasAlignment'], 'ALIGN_CENTER')}]);
+			self['mover']['add']($p['getattr'](self, 'cellPanel'));
+			self['mover']['add']($p['getattr'](self, 'b'));
+			self['add']($p['getattr'](self, 'GC'), $p['getattr']($m['DockPanel'], 'CENTER'));
+			self['add']($p['getattr'](self, 'mover'), $p['getattr']($m['DockPanel'], 'EAST'));
+			return null;
+		}
+	, 1, [null,null,['self'],['width'],['height'],['gametype']]);
+		$cls_definition['__init__'] = $method;
+		$method = $pyjs__bind_method2('onClick', function(sender) {
+			if (this.__is_instance__ === true) {
+				var self = this;
+			} else {
+				var self = arguments[0];
+				sender = arguments[1];
+			}
+			var $iter7_idx,origcell,$iter7_nextval,didMove,$and1,$iter7_array,j,cell,$iter7_type,cell2_txt,$sub2,cell1_txt,$sub1,piece,$and2,$iter7_iter;
+			if ($p['bool']($p['op_eq'](sender, $p['getattr'](self, 'b')))) {
+				cell1_txt = self['cell1']['getText']();
+				cell2_txt = self['cell2']['getText']();
+				if ($p['bool'](($p['bool']($and1=cell1_txt)?$p['getattr']($p['getattr']($p['getattr'](self, 'GC'), 'game'), 'board').__contains__(cell2_txt):$and1))) {
+					piece = $p['getattr']($p['getattr']($p['getattr'](self, 'GC'), 'game'), 'pieces').__getitem__($p['getattr']($p['getattr']($p['getattr'](self, 'GC'), 'game'), 'state').__getitem__(cell1_txt).__getitem__($p['__op_sub']($sub1=$p['len']($p['getattr']($p['getattr']($p['getattr'](self, 'GC'), 'game'), 'state').__getitem__(cell1_txt)),$sub2=1)));
+					origcell = $p['getattr'](piece, 'location');
+					cell = $p['getattr']($p['getattr']($p['getattr'](self, 'GC'), 'game'), 'board').__getitem__(cell2_txt);
+					didMove = self['GC']['game']['make_move'](piece, cell);
+					if ($p['bool'](didMove)) {
+						self['GC']['drawCell']($p['getattr']($p['getattr']($p['getattr'](self, 'GC'), 'game'), 'board').__getitem__(origcell), $m['COLORS']);
+						$iter7_iter = $p['getattr']($p['getattr']($p['getattr'](self, 'GC'), 'game'), 'state').__getitem__(origcell);
+						$iter7_nextval=$p['__iter_prepare']($iter7_iter,false);
+						while (typeof($p['__wrapped_next']($iter7_nextval).$nextval) != 'undefined') {
+							j = $iter7_nextval.$nextval;
+							self['GC']['drawPiece']($p['getattr']($p['getattr']($p['getattr'](self, 'GC'), 'game'), 'pieces').__getitem__(j), $p['getattr']($p['getattr']($p['getattr'](self, 'GC'), 'game'), 'board').__getitem__(origcell));
+						}
+						self['GC']['drawPiece'](piece, cell);
+					}
+				}
+				else {
+					$m['Window']['alert']('cell names not recognized!');
+				}
+				self['cell1']['setText']('');
+				self['cell2']['setText']('');
+			}
+			return null;
+		}
+	, 1, [null,null,['self'],['sender']]);
+		$cls_definition['onClick'] = $method;
+		var $bases = new Array($m['DockPanel']);
+		var $data = $p['dict']();
+		for (var $item in $cls_definition) { $data.__setitem__($item, $cls_definition[$item]); }
+		return $p['_create_class']('GamePlayer', $p['tuple']($bases), $data);
+	})();
 	if ($p['bool']($p['op_eq']((typeof __name__ == "undefined"?$m.__name__:__name__), '__main__'))) {
 		$m['pyjd']['setup']('public/ggPlayer.html');
-		$m['game'] = $m['GameCanvas']($m['BOARDWIDTH'], $m['BOARDHEIGHT'], 'Chess');
-		$m['dock'] = $pyjs_kwargs_call(null, $m['DockPanel'], null, null, [{HorizontalAlignment:$p['getattr']($m['HasAlignment'], 'ALIGN_CENTER'), Spacing:10}]);
-		$m['dock']['add']($m['game'], $p['getattr']($m['DockPanel'], 'CENTER'));
-		$m['RootPanel']()['add']($m['dock']);
+		$m['Player'] = $m['GamePlayer']($m['BOARDWIDTH'], $m['BOARDHEIGHT'], $m['GAMENAME']);
+		$m['RootPanel']()['add']($m['Player']);
 		$m['pyjd']['run']();
 	}
 	return this;
@@ -302,5 +374,5 @@ $pyjs.loaded_modules['ggPlayer'] = function (__mod_name__) {
 
 
 /*
-PYJS_DEPS: ['pyjd', 'pyjamas.DOM', 'pyjamas', 'pyjamas.ui.RootPanel.RootPanel', 'pyjamas.ui', 'pyjamas.ui.RootPanel', 'pyjamas.ui.RootPanel.RootPanelCls', 'pyjamas.ui.RootPanel.manageRootPanel', 'pyjamas.ui.Button.Button', 'pyjamas.ui.Button', 'pyjamas.ui.HTML.HTML', 'pyjamas.ui.HTML', 'pyjamas.ui.Label.Label', 'pyjamas.ui.Label', 'pyjamas.ui.FocusPanel.FocusPanel', 'pyjamas.ui.FocusPanel', 'pyjamas.ui.DockPanel.DockPanel', 'pyjamas.ui.DockPanel', 'pyjamas.ui.HasAlignment', 'pyjamas.Canvas.GWTCanvas.GWTCanvas', 'pyjamas.Canvas', 'pyjamas.Canvas.GWTCanvas', 'pyjamas.Canvas.ImageLoader.loadImages', 'pyjamas.Canvas.ImageLoader', 'pyjamas.Canvas.Color', 'pyjamas.ui.Image.Image', 'pyjamas.ui.Image', 'pyjamas.Timer.Timer', 'pyjamas.Timer', 'pyjamas.ui.Widget.Widget', 'pyjamas.ui.Widget', 'pyjamas.Window', 'pyjamas.ui.Event', 'pyjamas.ui.KeyboardListener', 'pyjamas.ui.KeyboardListener.KeyboardHandler', 'pyjamas.ui.ClickListener.ClickHandler', 'pyjamas.ui.ClickListener', 'pyjamas.dnd.makeDraggable', 'pyjamas.dnd', 'pyjamas.ui.DragWidget.DragWidget', 'pyjamas.ui.DragWidget', 'pyjamas.ui.DragWidget.DragContainer', 'pyjamas.ui.DropWidget.DropWidget', 'pyjamas.ui.DropWidget', 'pyjamas.dnd.getTypes', 'math', 'pygwt', 'random', 'chess.Chess', 'chess']
+PYJS_DEPS: ['pyjd', 'pyjamas.DOM', 'pyjamas', 'pyjamas.ui.RootPanel.RootPanel', 'pyjamas.ui', 'pyjamas.ui.RootPanel', 'pyjamas.ui.RootPanel.RootPanelCls', 'pyjamas.ui.RootPanel.manageRootPanel', 'pyjamas.ui.Button.Button', 'pyjamas.ui.Button', 'pyjamas.ui.TextBox.TextBox', 'pyjamas.ui.TextBox', 'pyjamas.ui.HTML.HTML', 'pyjamas.ui.HTML', 'pyjamas.ui.Label.Label', 'pyjamas.ui.Label', 'pyjamas.ui.FocusPanel.FocusPanel', 'pyjamas.ui.FocusPanel', 'pyjamas.ui.DockPanel.DockPanel', 'pyjamas.ui.DockPanel', 'pyjamas.ui.HorizontalPanel.HorizontalPanel', 'pyjamas.ui.HorizontalPanel', 'pyjamas.ui.VerticalPanel.VerticalPanel', 'pyjamas.ui.VerticalPanel', 'pyjamas.ui.HasAlignment', 'pyjamas.Canvas.GWTCanvas.GWTCanvas', 'pyjamas.Canvas', 'pyjamas.Canvas.GWTCanvas', 'pyjamas.Canvas.ImageLoader.loadImages', 'pyjamas.Canvas.ImageLoader', 'pyjamas.Canvas.Color', 'pyjamas.ui.Image.Image', 'pyjamas.ui.Image', 'pyjamas.Timer.Timer', 'pyjamas.Timer', 'pyjamas.ui.Widget.Widget', 'pyjamas.ui.Widget', 'pyjamas.Window', 'pyjamas.ui.Event', 'pyjamas.ui.KeyboardListener', 'pyjamas.ui.KeyboardListener.KeyboardHandler', 'pyjamas.ui.ClickListener.ClickHandler', 'pyjamas.ui.ClickListener', 'pyjamas.dnd.makeDraggable', 'pyjamas.dnd', 'pyjamas.ui.DragWidget.DragWidget', 'pyjamas.ui.DragWidget', 'pyjamas.ui.DragWidget.DragContainer', 'pyjamas.ui.DropWidget.DropWidget', 'pyjamas.ui.DropWidget', 'pyjamas.dnd.getTypes', 'math', 'pygwt', 'random', 'chess.Chess', 'chess']
 */

@@ -8,9 +8,9 @@ $pyjs.loaded_modules['chess'] = function (__mod_name__) {
 	$m.__name__ = __mod_name__;
 
 
-	$m['Boardgame'] = $p['___import___']('boardgame.Boardgame', null, null, false);
-	$m['Gamepiece'] = $p['___import___']('gamepiece.Gamepiece', null, null, false);
-	$m['gameCell'] = $p['___import___']('gamecell.gameCell', null, null, false);
+	$m['Boardgame'] = $p['___import___']('gg_arch.Boardgame', null, null, false);
+	$m['Gamepiece'] = $p['___import___']('gg_arch.Gamepiece', null, null, false);
+	$m['gameCell'] = $p['___import___']('gg_arch.gameCell', null, null, false);
 	$m['Chess'] = (function(){
 		var $cls_definition = new Object();
 		var $method;
@@ -46,7 +46,7 @@ $pyjs.loaded_modules['chess'] = function (__mod_name__) {
 						(($mod1=$mod1%$mod2)<0&&$mod2>0?$mod1+$mod2:$mod1):
 						$p['op_mod']($mod1,$mod2));
 					$p['getattr'](self, 'board').__setitem__($p['__op_add']($add7=files.__getitem__(j),$add8=ranks.__getitem__(i)), $m['gameCell']($p['__op_add']($add5=files.__getitem__(j),$add6=ranks.__getitem__(i)), color, 'rect', $p['list']([x, y, w, h])));
-					$p['getattr'](self, 'state').__setitem__($p['__op_add']($add9=files.__getitem__(j),$add10=ranks.__getitem__(i)), 'none');
+					$p['getattr'](self, 'state').__setitem__($p['__op_add']($add9=files.__getitem__(j),$add10=ranks.__getitem__(i)), $p['list']([]));
 				}
 			}
 			army = 'ppppppppRRNNBBQK';
@@ -123,12 +123,157 @@ $pyjs.loaded_modules['chess'] = function (__mod_name__) {
 			$iter9_nextval=$p['__iter_prepare']($iter9_iter,false);
 			while (typeof($p['__wrapped_next']($iter9_nextval).$nextval) != 'undefined') {
 				i = $iter9_nextval.$nextval;
-				$p['getattr'](self, 'state').__setitem__(stateInit.__getitem__(i).__getitem__(0), stateInit.__getitem__(i).__getitem__(1));
+				$p['getattr'](self, 'state').__getitem__(stateInit.__getitem__(i).__getitem__(0))['append'](stateInit.__getitem__(i).__getitem__(1));
+				$p['getattr'](self, 'pieces').__getitem__(stateInit.__getitem__(i).__getitem__(1)).location = stateInit.__getitem__(i).__getitem__(0);
 			}
+			$p['getattr'](self, 'state').__setitem__('player', 0);
 			return null;
 		}
 	, 1, [null,null,['self']]);
 		$cls_definition['__init__'] = $method;
+		$method = $pyjs__bind_method2('getLegalMoves', function(piece) {
+			if (this.__is_instance__ === true) {
+				var self = this;
+			} else {
+				var self = arguments[0];
+				piece = arguments[1];
+			}
+			var capture_E,dir_player,home,capture_W,current,forward,$and8,$and1,$and2,$and3,$and4,$and5,$and6,$and7,flag,legalMoves,forward_2,$add33,$add36,$add34,$add35;
+			current = $p['getattr'](piece, 'location');
+			legalMoves = $p['list']([]);
+			if ($p['bool'](!$p['op_eq']($p['getattr'](self, 'state').__getitem__('player'), $p['getattr'](piece, 'player')))) {
+				return legalMoves;
+			}
+			if ($p['bool']($p['op_eq']($p['getattr'](piece, '$$name'), 'p'))) {
+				dir_player = $p['list'](['N', 'S']);
+				var $tupleassign1 = $p['__ass_unpack'](self['getNextCell'](current, dir_player.__getitem__($p['getattr'](piece, 'player'))), 2, null);
+				flag = $tupleassign1[0];
+				forward = $tupleassign1[1];
+				if ($p['bool'](($p['bool']($and1=flag)?$p['op_eq']($p['getattr'](self, 'state').__getitem__(forward), $p['list']([])):$and1))) {
+					legalMoves['append'](forward);
+				}
+				home = $p['list'](['2', '7']);
+				if ($p['bool']($p['op_eq'](current.__getitem__(1), home.__getitem__($p['getattr'](piece, 'player'))))) {
+					var $tupleassign2 = $p['__ass_unpack'](self['getNextCell'](forward, dir_player.__getitem__($p['getattr'](piece, 'player'))), 2, null);
+					flag = $tupleassign2[0];
+					forward_2 = $tupleassign2[1];
+					if ($p['bool'](($p['bool']($and3=flag)?$p['op_eq']($p['getattr'](self, 'state').__getitem__(forward_2), $p['list']([])):$and3))) {
+						legalMoves['append'](forward_2);
+					}
+				}
+				var $tupleassign3 = $p['__ass_unpack'](self['getNextCell'](current, $p['__op_add']($add33=dir_player.__getitem__($p['getattr'](piece, 'player')),$add34='E')), 2, null);
+				flag = $tupleassign3[0];
+				capture_E = $tupleassign3[1];
+				if ($p['bool'](($p['bool']($and5=flag)?!$p['op_eq']($p['getattr'](self, 'state').__getitem__(capture_E), $p['list']([])):$and5))) {
+					if ($p['bool'](!$p['op_eq']($p['getattr']($p['getattr'](self, 'pieces').__getitem__($p['getattr'](self, 'state').__getitem__(capture_E).__getitem__(0)), 'player'), $p['getattr'](piece, 'player')))) {
+						legalMoves['append'](capture_E);
+					}
+				}
+				var $tupleassign4 = $p['__ass_unpack'](self['getNextCell'](current, $p['__op_add']($add35=dir_player.__getitem__($p['getattr'](piece, 'player')),$add36='W')), 2, null);
+				flag = $tupleassign4[0];
+				capture_W = $tupleassign4[1];
+				if ($p['bool'](($p['bool']($and7=flag)?!$p['op_eq']($p['getattr'](self, 'state').__getitem__(capture_W), $p['list']([])):$and7))) {
+					if ($p['bool'](!$p['op_eq']($p['getattr']($p['getattr'](self, 'pieces').__getitem__($p['getattr'](self, 'state').__getitem__(capture_W).__getitem__(0)), 'player'), $p['getattr'](piece, 'player')))) {
+						legalMoves['append'](capture_W);
+					}
+				}
+			}
+			else {
+				legalMoves = self['board']['keys']();
+			}
+			return legalMoves;
+		}
+	, 1, [null,null,['self'],['piece']]);
+		$cls_definition['getLegalMoves'] = $method;
+		$method = $pyjs__bind_method2('getNextCell', function(cellname, direction) {
+			if (this.__is_instance__ === true) {
+				var self = this;
+			} else {
+				var self = arguments[0];
+				cellname = arguments[1];
+				direction = arguments[2];
+			}
+			var $and10,nextfile,$add41,thisrank,outcell,$add42,thisfile,$add40,nextrank,$sub3,$sub6,$sub5,$sub4,files,$and9,flag,$and11,$add38,$add39,$add37;
+			files = 'abcdefgh';
+			thisfile = files['find'](cellname.__getitem__(0));
+			thisrank = $p['float_int'](cellname.__getitem__(1));
+			nextrank = thisrank;
+			nextfile = thisfile;
+			flag = ($p['bool']($and9=((($p['cmp'](thisfile, 0))|1) == 1))?($p['bool']($and10=((($p['cmp'](thisrank, 1))|1) == 1))?($p['cmp'](thisrank, 8) < 1):$and10):$and9);
+			if ($p['bool'](((($p['cmp'](direction['find']('N'), 0))|1) == 1))) {
+				if ($p['bool'](($p['cmp'](thisrank, 7) < 1))) {
+					nextrank = $p['__op_add']($add37=nextrank,$add38=1);
+				}
+				else {
+					flag = false;
+				}
+			}
+			if ($p['bool'](((($p['cmp'](direction['find']('S'), 0))|1) == 1))) {
+				if ($p['bool'](((($p['cmp'](thisrank, 2))|1) == 1))) {
+					nextrank = $p['__op_sub']($sub3=nextrank,$sub4=1);
+				}
+				else {
+					flag = false;
+				}
+			}
+			if ($p['bool'](((($p['cmp'](direction['find']('E'), 0))|1) == 1))) {
+				if ($p['bool'](($p['cmp'](thisfile, 6) < 1))) {
+					nextfile = $p['__op_add']($add39=nextfile,$add40=1);
+				}
+				else {
+					flag = false;
+				}
+			}
+			if ($p['bool'](((($p['cmp'](direction['find']('W'), 0))|1) == 1))) {
+				if ($p['bool'](((($p['cmp'](thisfile, 1))|1) == 1))) {
+					nextfile = $p['__op_sub']($sub5=nextfile,$sub6=1);
+				}
+				else {
+					flag = false;
+				}
+			}
+			outcell = $p['__op_add']($add41=files.__getitem__(nextfile),$add42=$p['str'](nextrank));
+			return $p['tuple']([flag, outcell]);
+		}
+	, 1, [null,null,['self'],['cellname'],['direction']]);
+		$cls_definition['getNextCell'] = $method;
+		$method = $pyjs__bind_method2('newState', function(piece, cell) {
+			if (this.__is_instance__ === true) {
+				var self = this;
+			} else {
+				var self = arguments[0];
+				piece = arguments[1];
+				cell = arguments[2];
+			}
+			var newState,$add44,$add43,$mod4,$mod3;
+			newState = $m['Boardgame']['newState'](self, piece, cell);
+			newState.__setitem__('player', $p['__op_add']($add43=newState.__getitem__('player'),$add44=1));
+			newState.__setitem__('player', (typeof ($mod3=newState.__getitem__('player'))==typeof ($mod4=2) && typeof $mod3=='number'?
+				(($mod3=$mod3%$mod4)<0&&$mod4>0?$mod3+$mod4:$mod3):
+				$p['op_mod']($mod3,$mod4)));
+			return newState;
+		}
+	, 1, [null,null,['self'],['piece'],['cell']]);
+		$cls_definition['newState'] = $method;
+		$method = $pyjs__bind_method2('isLegalState', function(teststate) {
+			if (this.__is_instance__ === true) {
+				var self = this;
+			} else {
+				var self = arguments[0];
+				teststate = arguments[1];
+			}
+			var newplayer,$add46,event_args,$mod5,$mod6,oldplayer,isLegal,$add45,event;
+			isLegal = true;
+			event = $p['list']([]);
+			event_args = $p['list']([]);
+			newplayer = teststate.__getitem__('player');
+			oldplayer = (typeof ($mod5=$p['__op_add']($add45=newplayer,$add46=1))==typeof ($mod6=2) && typeof $mod5=='number'?
+				(($mod5=$mod5%$mod6)<0&&$mod6>0?$mod5+$mod6:$mod5):
+				$p['op_mod']($mod5,$mod6));
+			return $p['tuple']([isLegal, event, event_args]);
+		}
+	, 1, [null,null,['self'],['teststate']]);
+		$cls_definition['isLegalState'] = $method;
 		var $bases = new Array($m['Boardgame']);
 		var $data = $p['dict']();
 		for (var $item in $cls_definition) { $data.__setitem__($item, $cls_definition[$item]); }
@@ -142,5 +287,5 @@ $pyjs.loaded_modules['chess'] = function (__mod_name__) {
 
 
 /*
-PYJS_DEPS: ['boardgame.Boardgame', 'boardgame', 'gamepiece.Gamepiece', 'gamepiece', 'gamecell.gameCell', 'gamecell']
+PYJS_DEPS: ['gg_arch.Boardgame', 'gg_arch', 'gg_arch.Gamepiece', 'gg_arch.gameCell']
 */

@@ -1,0 +1,257 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Welcome to ggPlayer’s documentation! &mdash; ggPlayer 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="ggPlayer 0.0.1 documentation" href="#" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="#">ggPlayer 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="welcome-to-ggplayer-s-documentation">
+<h1>Welcome to ggPlayer&#8217;s documentation!<a class="headerlink" href="#welcome-to-ggplayer-s-documentation" title="Permalink to this headline">¶</a></h1>
+<p>Contents:</p>
+<div class="toctree-wrapper compound">
+<ul class="simple">
+</ul>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><em>Index</em></a></li>
+<li><a class="reference internal" href="py-modindex.html"><em>Module Index</em></a></li>
+<li><a class="reference internal" href="search.html"><em>Search Page</em></a></li>
+</ul>
+<div class="section" id="module-gg_arch">
+<span id="documentation-for-the-code"></span><h2>Documentation for the Code<a class="headerlink" href="#module-gg_arch" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+<div class="section" id="module-gg_arch.boardgame">
+<span id="boardgame"></span><h1>boardgame<a class="headerlink" href="#module-gg_arch.boardgame" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="gg_arch.boardgame.Boardgame">
+<em class="property">class </em><tt class="descclassname">gg_arch.boardgame.</tt><tt class="descname">Boardgame</tt><big>(</big><em>gamename</em><big>)</big><a class="headerlink" href="#gg_arch.boardgame.Boardgame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Common boardgame class</p>
+<p>The basic class for a boardgame object.
+Specific games (including boards, pieces, and rulesets) will be created as subclasses of this object.</p>
+<dl class="docutils">
+<dt>Attributes:</dt>
+<dd>board (dict):  Game board definition.  board[cell.name]: gameCell object
+state (dict):  Current state definition.  state[cell.name]: list of gamepiece.ID currently in cell
+history (list):  History of executed moves, appended from end
+pieces (list):  List of Gamepiece objects.  pieces[gamepiece.ID] = gamepiece 
+gamename (str):  Name of the game (for reference only)
+boardtype (str):  Name of the board type (for reference only)
+num_players (int):  Number of players</dd>
+</dl>
+<dl class="method">
+<dt id="gg_arch.boardgame.Boardgame.doEvent">
+<tt class="descname">doEvent</tt><big>(</big><em>event</em>, <em>args</em><big>)</big><a class="headerlink" href="#gg_arch.boardgame.Boardgame.doEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute an event precipitated by a move (e.g. king in check, kill piece, ...</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gg_arch.boardgame.Boardgame.getBoard">
+<tt class="descname">getBoard</tt><big>(</big><big>)</big><a class="headerlink" href="#gg_arch.boardgame.Boardgame.getBoard" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the current state of the board</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gg_arch.boardgame.Boardgame.getHistory">
+<tt class="descname">getHistory</tt><big>(</big><big>)</big><a class="headerlink" href="#gg_arch.boardgame.Boardgame.getHistory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the history of executed moves</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gg_arch.boardgame.Boardgame.isLegalMove">
+<tt class="descname">isLegalMove</tt><big>(</big><em>piece</em>, <em>cell</em><big>)</big><a class="headerlink" href="#gg_arch.boardgame.Boardgame.isLegalMove" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if moving piece to cell is a legal move</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gg_arch.boardgame.Boardgame.isLegalState">
+<tt class="descname">isLegalState</tt><big>(</big><em>state</em><big>)</big><a class="headerlink" href="#gg_arch.boardgame.Boardgame.isLegalState" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if a state is legal</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gg_arch.boardgame.Boardgame.make_move">
+<tt class="descname">make_move</tt><big>(</big><em>piece</em>, <em>cell</em><big>)</big><a class="headerlink" href="#gg_arch.boardgame.Boardgame.make_move" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if a proposed move is legal; modify the game state and history</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>piece</strong> (<em>:class:Gamepiece object</em>) &#8211; The piece to be moved.</li>
+<li><strong>cell</strong> (<em>:class:gameCell object</em>) &#8211; The destination cell of the piece.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">bool &#8211; true, if successful</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-gg_arch.gamepiece">
+<span id="gamepiece"></span><h1>Gamepiece<a class="headerlink" href="#module-gg_arch.gamepiece" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="gg_arch.gamepiece.Gamepiece">
+<em class="property">class </em><tt class="descclassname">gg_arch.gamepiece.</tt><tt class="descname">Gamepiece</tt><big>(</big><em>player</em>, <em>name</em>, <em>ID</em>, <em>location='none'</em><big>)</big><a class="headerlink" href="#gg_arch.gamepiece.Gamepiece" title="Permalink to this definition">¶</a></dt>
+<dd><p>Common boardgame piece object</p>
+<dl class="docutils">
+<dt>Attributes:</dt>
+<dd>player (int):  The player who owns the piece
+name (str):  The name of the piece, used to define legal behavior
+ID (int):  The unique ID of the piece
+location (str):  The name of the cell where the piece currently is (default &#8216;none&#8217;)</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-gg_arch.gamecell">
+<span id="gamecell"></span><h1>gameCell<a class="headerlink" href="#module-gg_arch.gamecell" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="gg_arch.gamecell.gameCell">
+<em class="property">class </em><tt class="descclassname">gg_arch.gamecell.</tt><tt class="descname">gameCell</tt><big>(</big><em>name, color, shape='rect', params=[0, 0, 1, 1]</em><big>)</big><a class="headerlink" href="#gg_arch.gamecell.gameCell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Common game cell object.</p>
+<dl class="docutils">
+<dt>Attributes:</dt>
+<dd>name (str):  The name of the cell
+shape (str):  The shape of the cell (used for internal methods)
+params (list):  Parameters defining the location and shape of the cell, interpreted depending on &#8216;shape&#8217;
+color (int):  The color index of the cell (actual colors defined based on index when drawing).</dd>
+</dl>
+<dl class="method">
+<dt id="gg_arch.gamecell.gameCell.getPath">
+<tt class="descname">getPath</tt><big>(</big><big>)</big><a class="headerlink" href="#gg_arch.gamecell.gameCell.getPath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the path defining the outer boundary of the cell</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">path &#8211; tuple of lists containing the path parameters (length m)
+pathtype &#8211; tuple of path types for interpreting &#8216;path&#8217; (length (m-1))</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gg_arch.gamecell.gameCell.getPos">
+<tt class="descname">getPos</tt><big>(</big><big>)</big><a class="headerlink" href="#gg_arch.gamecell.gameCell.getPos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the position of the cell.  Interpretation depends on :attr:shape.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gg_arch.gamecell.gameCell.getSize">
+<tt class="descname">getSize</tt><big>(</big><big>)</big><a class="headerlink" href="#gg_arch.gamecell.gameCell.getSize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the size of the cell.  Interpretation depends on :attr:shape.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Welcome to ggPlayer&#8217;s documentation!</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a><ul>
+<li><a class="reference internal" href="#module-gg_arch">Documentation for the Code</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-gg_arch.boardgame">boardgame</a></li>
+<li><a class="reference internal" href="#module-gg_arch.gamepiece">Gamepiece</a></li>
+<li><a class="reference internal" href="#module-gg_arch.gamecell">gameCell</a></li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="#">ggPlayer 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Hans Rinderknecht.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+  </body>
+</html>

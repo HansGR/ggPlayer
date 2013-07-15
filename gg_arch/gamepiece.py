@@ -16,9 +16,29 @@
 ## along with ggPlayer.  If not, see <http://www.gnu.org/licenses/>.
 
 class Gamepiece(object):
-    'Common boardgame piece class'
+    """Common boardgame piece object
 
-    def __init__(self, Player, name, ID):
-        self.Player = Player
-        self.Name = name
+    Attributes:
+        player (int):  The player who owns the piece
+        name (str):  The name of the piece, used to define legal behavior
+        ID (int):  The unique ID of the piece
+        location (str):  The name of the cell where the piece currently is (default 'none')
+    """
+
+    def __init__(self, player, name, ID, location="none"):
+        """Initialize the gamepiece
+
+        :param player: Player who owns this piece
+        :type player:  int
+        :param name:  Name of the piece
+        :type name:  str
+        :param ID:  ID of the piece
+        :type ID:  int
+        :param location:  The name of the cell where the piece currently is (default 'none')
+        :type location:  str
+        
+        """
+        self.player = player
+        self.name = name
         self.ID = ID
+        self.location = location

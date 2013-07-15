@@ -15,9 +15,7 @@
 ## You should have received a copy of the GNU General Public License
 ## along with ggPlayer.  If not, see <http://www.gnu.org/licenses/>.
 
-from boardgame import Boardgame
-from gamepiece import Gamepiece
-from gamecell import gameCell
+from gg_arch import Boardgame, Gamepiece, gameCell
 
 class Chess (Boardgame):
     'Generic chess class'
@@ -36,7 +34,7 @@ class Chess (Boardgame):
                 h = 0.125
                 color = (i+j+1)%2
                 self.board[files[j]+ranks[i]] = gameCell(files[j]+ranks[i],color,'rect',[x,y,w,h])
-                self.state[files[j]+ranks[i]] = 'none'
+                self.state[files[j]+ranks[i]] = []
            
         # Construct the armies
         army = 'ppppppppRRNNBBQK'
@@ -54,28 +52,143 @@ class Chess (Boardgame):
         stateInit = whitePawns + whiteHome + blackPawns + blackHome 
 
         for i in range(len(stateInit)):
-            self.state[stateInit[i][0]] = stateInit[i][1]
+            self.state[stateInit[i][0]].append(stateInit[i][1])
+            self.pieces[stateInit[i][1]].location = stateInit[i][0]
+
+        # Define game-specific state variables
+        self.state['player'] = 0
         return
 
-##    def getLegalMoves(self, piece_ID):
-##        current = self.getLocation(piece_ID)
-##        [file_index,row_index] = self.getFileRow(cell_current)
-##        legalMoves = [];
-##        switch self.pieces(piece_ID).name
-##            case 'p'
-##                if self.state(self.getCellID(file_index,row_index+1))=='':
-##					legalMoves.append(self.getCellName(file_index,row_index+1)
-##				
-##				if self.state(self.getCellID(file_index+1,row_index+1))!='':
-##					legalMoves.append(self.getCellName(file_index+1,row_index+1)
-##				if self.state(self.getCellID(file_index-1,row_index+1))!='':
-##					legalMoves.append(self.getCellName(file_index-1,row_index+1)
-##            case 'R'
-##
-##            case 'N'
-##
-##            case 'B'
-##
-##            case 'Q'
-##
-##            case 'K'
+    def getLegalMoves(self, piece):
+        """Get a list of the legal moves for a given piece
+
+        :param piece:  piece to get legal moves for
+        :type piece:  Gamepiece object
+        
+        :return legalMoves:  list of cell names where the piece may move
+        :type legalMoves:  list
+        """
+        current = piece.location
+        #[file_index,row_index] = self.getFileRow(cell_current)
+        legalMoves = []
+        if self.state['player']!=piece.player:
+            return legalMoves
+        
+        if piece.name == 'p':
+            dir_player = ['N','S']
+            flag, forward = self.getNextCell(current,dir_player[piece.player])
+            if flag and self.state[forward]==[]:
+                legalMoves.append(forward)
+            home = ['2','7']
+            if current[1] == home[piece.player]:
+                flag, forward_2 = self.getNextCell(forward,dir_player[piece.player])
+                if flag and self.state[forward_2]==[]:
+                    legalMoves.append(forward_2)
+            flag, capture_E = self.getNextCell(current,dir_player[piece.player]+'E')
+            if flag and self.state[capture_E]!=[]:
+                if self.pieces[self.state[capture_E][0]].player!=piece.player:
+                    legalMoves.append(capture_E)
+            flag, capture_W = self.getNextCell(current,dir_player[piece.player]+'W')
+	    if flag and self.state[capture_W]!=[]:
+                if self.pieces[self.state[capture_W][0]].player!=piece.player:
+                    legalMoves.append(capture_W)
+        else:
+            legalMoves = self.board.keys()
+
+        return legalMoves
+            
+           
+    def getNextCell(self,cellname,direction):
+        """Given a cell name, find the next cell in some direction
+
+        :param cellname:  name of current cell
+        :type cellname:  string
+        :param direction:  direction to find next cell: one of N,S,E,W,NW,NE,SW,SE
+        :type direction:  string
+
+        :return newcell:  name of cell in that direction (none if empty)
+        :type newcell:  string
+        """
+        files = 'abcdefgh'
+        thisfile = files.find(cellname[0])
+        thisrank = int(cellname[1])
+        nextrank = thisrank;
+        nextfile = thisfile;
+        flag = thisfile>=0 and thisrank>=1 and thisrank<=8
+        
+        if (direction.find('N')>=0):
+            if (thisrank<=7):
+                nextrank += 1
+            else: flag = False
+        
+        if (direction.find('S')>=0):
+            if (thisrank>=2):
+                nextrank -= 1
+            else: flag = False
+        
+        if (direction.find('E')>=0):
+            if (thisfile<=6):
+                nextfile += 1
+            else: flag = False
+        
+        if (direction.find('W')>=0):
+            if (thisfile>=1):
+                nextfile -= 1
+            else: flag = False
+
+        outcell = files[nextfile]+str(nextrank)
+        return flag, outcell
+
+    def newState(self, piece, cell):
+        """Generic new state from moving piece to cell
+
+        :param piece: The piece to be moved.
+        :type piece: :class:Gamepiece object
+        :param cell:  The destination cell of the piece.
+        :type cell: :class:gameCell object
+        :returns:  newState, a state for this game
+            
+        """
+        newState = Boardgame.newState(self, piece, cell)
+        newState['player'] += 1
+        newState['player'] %= 2
+        return newState
+
+    def isLegalState(self,teststate):
+        """Determine if board state is legal, or has precipitated events
+
+        :param teststate:  state of the board to be tested
+        :type teststate:  game state dictionary
+
+        :return isLegal:  Legality of the state
+        :type isLegal:  bool
+        :return event:  events to trigger
+        :type event:  list
+        :return event_args:  arguments to go with events
+        :type event_args:  list
+        """
+        isLegal = True
+        event = []
+        event_args = []
+        
+        newplayer = teststate['player']
+        oldplayer = (newplayer +1)%2
+
+        # ILLEGAL STATES:
+        # Look for oldplayer is in check
+##        for piece in self.pieces:
+##            legalMoves = []
+##            if piece.player == newplayer:
+##                legalMoves.append(self.getLegalMoves(piece))
+##        if self.pieces[oldplayer*16+15].location in legalMoves:
+##            isLegal = False
+        
+        # LEGAL STATES with EVENTS:
+        # Look for capture
+        
+        # Look for pawn promotion
+
+        # Look for checkmate
+        
+        return isLegal, event, event_args
+        
