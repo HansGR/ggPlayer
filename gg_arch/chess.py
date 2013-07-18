@@ -73,8 +73,9 @@ class Chess (Boardgame):
         legalMoves = []
         if self.state['player']!=piece.player:
             return legalMoves
-        
-        if piece.name == 'p':
+
+        # Pawns
+        if piece.name == 'p':  
             dir_player = ['N','S']
             flag, forward = self.getNextCell(current,dir_player[piece.player])
             if flag and self.state[forward]==[]:
@@ -92,6 +93,75 @@ class Chess (Boardgame):
 	    if flag and self.state[capture_W]!=[]:
                 if self.pieces[self.state[capture_W][0]].player!=piece.player:
                     legalMoves.append(capture_W)
+        # Sliders
+        elif piece.name == 'R':
+            for direction in ['N','S','E','W']:
+                flag, nextcell = self.getNextCell(current,direction)
+                while flag==True:
+                    if self.state[nextcell]==[]:
+                        legalMoves.append(nextcell)
+                        flag, nextcell = self.getNextCell(nextcell,direction)
+                    elif self.pieces[self.state[nextcell][0]].player!=piece.player:
+                        legalMoves.append(nextcell)
+                        flag = False
+                    else:
+                        flag = False
+
+        elif piece.name == 'B':
+            for direction in ['NE','NW','SE','SW']:
+                flag, nextcell = self.getNextCell(current,direction)
+                while flag==True:
+                    if self.state[nextcell]==[]:
+                        legalMoves.append(nextcell)
+                        flag, nextcell = self.getNextCell(nextcell,direction)
+                    elif self.pieces[self.state[nextcell][0]].player!=piece.player:
+                        legalMoves.append(nextcell)
+                        flag = False
+                    else:
+                        flag = False
+                        
+        elif piece.name == 'Q':
+            for direction in ['N','NE','E','SE','S','SW','W','NW']:
+                flag, nextcell = self.getNextCell(current,direction)
+                while flag==True:
+                    if self.state[nextcell]==[]:
+                        legalMoves.append(nextcell)
+                        flag, nextcell = self.getNextCell(nextcell,direction)
+                    elif self.pieces[self.state[nextcell][0]].player!=piece.player:
+                        legalMoves.append(nextcell)
+                        flag = False
+                    else:
+                        flag = False
+
+        # Hoppers
+        elif piece.name == 'N':
+            hops = [2,1]
+            perpdir = [['NS','EW'],['EW','NS']]
+            for directions in perpdir:
+                for dx in directions[0]:
+                    for dy in directions[1]:
+                        flag = True
+                        i = 0
+                        j = 0
+                        nextcell = current
+                        while flag and i<hops[0]:
+                            flag, nextcell = self.getNextCell(nextcell,dx)
+                            i += 1
+                        while flag and j<hops[1]:
+                            flag, nextcell = self.getNextCell(nextcell,dy)
+                            j += 1
+                        if flag and (self.state[nextcell]==[] or self.pieces[self.state[nextcell][0]].player!=piece.player):
+                            legalMoves.append(nextcell)
+
+        # King
+        elif piece.name == 'K':
+             for direction in ['N','NE','E','SE','S','SW','W','NW']:
+                flag, nextcell = self.getNextCell(current,direction)
+                if flag and self.state[nextcell]==[]:
+                    legalMoves.append(nextcell)
+                elif flag and self.pieces[self.state[nextcell][0]].player!=piece.player:
+                    legalMoves.append(nextcell)
+                    
         else:
             legalMoves = self.board.keys()
 

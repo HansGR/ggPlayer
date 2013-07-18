@@ -52891,7 +52891,7 @@ $pyjs.loaded_modules['chess'] = function (__mod_name__) {
 				var self = arguments[0];
 				piece = arguments[1];
 			}
-			var capture_E,dir_player,home,capture_W,current,forward,$and8,$and1,$and2,$and3,$and4,$and5,$and6,$and7,flag,legalMoves,forward_2,$add33,$add36,$add34,$add35;
+			var $iter10_nextval,$and14,dx,capture_E,$iter14_array,perpdir,$add37,$iter12_array,$iter10_array,dy,dir_player,$and15,home,capture_W,$iter10_iter,$iter15_idx,$or1,$iter13_array,$iter15_iter,$iter16_type,hops,$iter16_iter,j,current,$iter12_nextval,$iter11_iter,forward,$iter16_nextval,$iter11_idx,$and18,$iter13_type,$and8,$and9,direction,nextcell,$iter14_type,$or2,$and1,$and2,$and3,$and4,$and5,$and6,$and7,$and12,$and13,flag,legalMoves,$and16,$and17,$iter14_iter,$iter11_array,directions,$iter11_nextval,forward_2,$iter14_idx,$iter14_nextval,$iter16_array,$iter16_idx,$add38,$add39,$iter13_nextval,$add40,$iter13_iter,i,$add33,$iter12_type,$iter11_type,$add36,$and10,$add34,$add35,$iter12_iter,$and11,$iter15_nextval,$iter15_type,$iter10_type,$iter12_idx,$iter10_idx,$iter15_array,$iter13_idx;
 			current = $p['getattr'](piece, 'location');
 			legalMoves = $p['list']([]);
 			if ($p['bool'](!$p['op_eq']($p['getattr'](self, 'state').__getitem__('player'), $p['getattr'](piece, 'player')))) {
@@ -52931,6 +52931,135 @@ $pyjs.loaded_modules['chess'] = function (__mod_name__) {
 					}
 				}
 			}
+			else if ($p['bool']($p['op_eq']($p['getattr'](piece, '$$name'), 'R'))) {
+				$iter10_iter = $p['list'](['N', 'S', 'E', 'W']);
+				$iter10_nextval=$p['__iter_prepare']($iter10_iter,false);
+				while (typeof($p['__wrapped_next']($iter10_nextval).$nextval) != 'undefined') {
+					direction = $iter10_nextval.$nextval;
+					var $tupleassign5 = $p['__ass_unpack'](self['getNextCell'](current, direction), 2, null);
+					flag = $tupleassign5[0];
+					nextcell = $tupleassign5[1];
+					while ($p['bool']($p['op_eq'](flag, true))) {
+						if ($p['bool']($p['op_eq']($p['getattr'](self, 'state').__getitem__(nextcell), $p['list']([])))) {
+							legalMoves['append'](nextcell);
+							var $tupleassign6 = $p['__ass_unpack'](self['getNextCell'](nextcell, direction), 2, null);
+							flag = $tupleassign6[0];
+							nextcell = $tupleassign6[1];
+						}
+						else if ($p['bool'](!$p['op_eq']($p['getattr']($p['getattr'](self, 'pieces').__getitem__($p['getattr'](self, 'state').__getitem__(nextcell).__getitem__(0)), 'player'), $p['getattr'](piece, 'player')))) {
+							legalMoves['append'](nextcell);
+							flag = false;
+						}
+						else {
+							flag = false;
+						}
+					}
+				}
+			}
+			else if ($p['bool']($p['op_eq']($p['getattr'](piece, '$$name'), 'B'))) {
+				$iter11_iter = $p['list'](['NE', 'NW', 'SE', 'SW']);
+				$iter11_nextval=$p['__iter_prepare']($iter11_iter,false);
+				while (typeof($p['__wrapped_next']($iter11_nextval).$nextval) != 'undefined') {
+					direction = $iter11_nextval.$nextval;
+					var $tupleassign7 = $p['__ass_unpack'](self['getNextCell'](current, direction), 2, null);
+					flag = $tupleassign7[0];
+					nextcell = $tupleassign7[1];
+					while ($p['bool']($p['op_eq'](flag, true))) {
+						if ($p['bool']($p['op_eq']($p['getattr'](self, 'state').__getitem__(nextcell), $p['list']([])))) {
+							legalMoves['append'](nextcell);
+							var $tupleassign8 = $p['__ass_unpack'](self['getNextCell'](nextcell, direction), 2, null);
+							flag = $tupleassign8[0];
+							nextcell = $tupleassign8[1];
+						}
+						else if ($p['bool'](!$p['op_eq']($p['getattr']($p['getattr'](self, 'pieces').__getitem__($p['getattr'](self, 'state').__getitem__(nextcell).__getitem__(0)), 'player'), $p['getattr'](piece, 'player')))) {
+							legalMoves['append'](nextcell);
+							flag = false;
+						}
+						else {
+							flag = false;
+						}
+					}
+				}
+			}
+			else if ($p['bool']($p['op_eq']($p['getattr'](piece, '$$name'), 'Q'))) {
+				$iter12_iter = $p['list'](['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW']);
+				$iter12_nextval=$p['__iter_prepare']($iter12_iter,false);
+				while (typeof($p['__wrapped_next']($iter12_nextval).$nextval) != 'undefined') {
+					direction = $iter12_nextval.$nextval;
+					var $tupleassign9 = $p['__ass_unpack'](self['getNextCell'](current, direction), 2, null);
+					flag = $tupleassign9[0];
+					nextcell = $tupleassign9[1];
+					while ($p['bool']($p['op_eq'](flag, true))) {
+						if ($p['bool']($p['op_eq']($p['getattr'](self, 'state').__getitem__(nextcell), $p['list']([])))) {
+							legalMoves['append'](nextcell);
+							var $tupleassign10 = $p['__ass_unpack'](self['getNextCell'](nextcell, direction), 2, null);
+							flag = $tupleassign10[0];
+							nextcell = $tupleassign10[1];
+						}
+						else if ($p['bool'](!$p['op_eq']($p['getattr']($p['getattr'](self, 'pieces').__getitem__($p['getattr'](self, 'state').__getitem__(nextcell).__getitem__(0)), 'player'), $p['getattr'](piece, 'player')))) {
+							legalMoves['append'](nextcell);
+							flag = false;
+						}
+						else {
+							flag = false;
+						}
+					}
+				}
+			}
+			else if ($p['bool']($p['op_eq']($p['getattr'](piece, '$$name'), 'N'))) {
+				hops = $p['list']([2, 1]);
+				perpdir = $p['list']([$p['list'](['NS', 'EW']), $p['list'](['EW', 'NS'])]);
+				$iter13_iter = perpdir;
+				$iter13_nextval=$p['__iter_prepare']($iter13_iter,false);
+				while (typeof($p['__wrapped_next']($iter13_nextval).$nextval) != 'undefined') {
+					directions = $iter13_nextval.$nextval;
+					$iter14_iter = directions.__getitem__(0);
+					$iter14_nextval=$p['__iter_prepare']($iter14_iter,false);
+					while (typeof($p['__wrapped_next']($iter14_nextval).$nextval) != 'undefined') {
+						dx = $iter14_nextval.$nextval;
+						$iter15_iter = directions.__getitem__(1);
+						$iter15_nextval=$p['__iter_prepare']($iter15_iter,false);
+						while (typeof($p['__wrapped_next']($iter15_nextval).$nextval) != 'undefined') {
+							dy = $iter15_nextval.$nextval;
+							flag = true;
+							i = 0;
+							j = 0;
+							nextcell = current;
+							while ($p['bool'](($p['bool']($and9=flag)?($p['cmp'](i, hops.__getitem__(0)) == -1):$and9))) {
+								var $tupleassign11 = $p['__ass_unpack'](self['getNextCell'](nextcell, dx), 2, null);
+								flag = $tupleassign11[0];
+								nextcell = $tupleassign11[1];
+								i = $p['__op_add']($add37=i,$add38=1);
+							}
+							while ($p['bool'](($p['bool']($and11=flag)?($p['cmp'](j, hops.__getitem__(1)) == -1):$and11))) {
+								var $tupleassign12 = $p['__ass_unpack'](self['getNextCell'](nextcell, dy), 2, null);
+								flag = $tupleassign12[0];
+								nextcell = $tupleassign12[1];
+								j = $p['__op_add']($add39=j,$add40=1);
+							}
+							if ($p['bool'](($p['bool']($and13=flag)?($p['bool']($or1=$p['op_eq']($p['getattr'](self, 'state').__getitem__(nextcell), $p['list']([])))?$or1:!$p['op_eq']($p['getattr']($p['getattr'](self, 'pieces').__getitem__($p['getattr'](self, 'state').__getitem__(nextcell).__getitem__(0)), 'player'), $p['getattr'](piece, 'player'))):$and13))) {
+								legalMoves['append'](nextcell);
+							}
+						}
+					}
+				}
+			}
+			else if ($p['bool']($p['op_eq']($p['getattr'](piece, '$$name'), 'K'))) {
+				$iter16_iter = $p['list'](['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW']);
+				$iter16_nextval=$p['__iter_prepare']($iter16_iter,false);
+				while (typeof($p['__wrapped_next']($iter16_nextval).$nextval) != 'undefined') {
+					direction = $iter16_nextval.$nextval;
+					var $tupleassign13 = $p['__ass_unpack'](self['getNextCell'](current, direction), 2, null);
+					flag = $tupleassign13[0];
+					nextcell = $tupleassign13[1];
+					if ($p['bool'](($p['bool']($and15=flag)?$p['op_eq']($p['getattr'](self, 'state').__getitem__(nextcell), $p['list']([])):$and15))) {
+						legalMoves['append'](nextcell);
+					}
+					else if ($p['bool'](($p['bool']($and17=flag)?!$p['op_eq']($p['getattr']($p['getattr'](self, 'pieces').__getitem__($p['getattr'](self, 'state').__getitem__(nextcell).__getitem__(0)), 'player'), $p['getattr'](piece, 'player')):$and17))) {
+						legalMoves['append'](nextcell);
+					}
+				}
+			}
 			else {
 				legalMoves = self['board']['keys']();
 			}
@@ -52946,16 +53075,16 @@ $pyjs.loaded_modules['chess'] = function (__mod_name__) {
 				cellname = arguments[1];
 				direction = arguments[2];
 			}
-			var $and10,nextfile,$add41,thisrank,outcell,$add42,thisfile,$add40,nextrank,$sub3,$sub6,$sub5,$sub4,files,$and9,flag,$and11,$add38,$add39,$add37;
+			var nextfile,$add41,thisrank,$and21,$and20,$add46,$add45,$add44,$add43,$add42,thisfile,outcell,nextrank,$sub3,$sub6,$sub5,$sub4,files,flag,$and19;
 			files = 'abcdefgh';
 			thisfile = files['find'](cellname.__getitem__(0));
 			thisrank = $p['float_int'](cellname.__getitem__(1));
 			nextrank = thisrank;
 			nextfile = thisfile;
-			flag = ($p['bool']($and9=((($p['cmp'](thisfile, 0))|1) == 1))?($p['bool']($and10=((($p['cmp'](thisrank, 1))|1) == 1))?($p['cmp'](thisrank, 8) < 1):$and10):$and9);
+			flag = ($p['bool']($and19=((($p['cmp'](thisfile, 0))|1) == 1))?($p['bool']($and20=((($p['cmp'](thisrank, 1))|1) == 1))?($p['cmp'](thisrank, 8) < 1):$and20):$and19);
 			if ($p['bool'](((($p['cmp'](direction['find']('N'), 0))|1) == 1))) {
 				if ($p['bool'](($p['cmp'](thisrank, 7) < 1))) {
-					nextrank = $p['__op_add']($add37=nextrank,$add38=1);
+					nextrank = $p['__op_add']($add41=nextrank,$add42=1);
 				}
 				else {
 					flag = false;
@@ -52971,7 +53100,7 @@ $pyjs.loaded_modules['chess'] = function (__mod_name__) {
 			}
 			if ($p['bool'](((($p['cmp'](direction['find']('E'), 0))|1) == 1))) {
 				if ($p['bool'](($p['cmp'](thisfile, 6) < 1))) {
-					nextfile = $p['__op_add']($add39=nextfile,$add40=1);
+					nextfile = $p['__op_add']($add43=nextfile,$add44=1);
 				}
 				else {
 					flag = false;
@@ -52985,7 +53114,7 @@ $pyjs.loaded_modules['chess'] = function (__mod_name__) {
 					flag = false;
 				}
 			}
-			outcell = $p['__op_add']($add41=files.__getitem__(nextfile),$add42=$p['str'](nextrank));
+			outcell = $p['__op_add']($add45=files.__getitem__(nextfile),$add46=$p['str'](nextrank));
 			return $p['tuple']([flag, outcell]);
 		}
 	, 1, [null,null,['self'],['cellname'],['direction']]);
@@ -52998,9 +53127,9 @@ $pyjs.loaded_modules['chess'] = function (__mod_name__) {
 				piece = arguments[1];
 				cell = arguments[2];
 			}
-			var newState,$add44,$add43,$mod4,$mod3;
+			var $add48,$add47,newState,$mod4,$mod3;
 			newState = $m['Boardgame']['newState'](self, piece, cell);
-			newState.__setitem__('player', $p['__op_add']($add43=newState.__getitem__('player'),$add44=1));
+			newState.__setitem__('player', $p['__op_add']($add47=newState.__getitem__('player'),$add48=1));
 			newState.__setitem__('player', (typeof ($mod3=newState.__getitem__('player'))==typeof ($mod4=2) && typeof $mod3=='number'?
 				(($mod3=$mod3%$mod4)<0&&$mod4>0?$mod3+$mod4:$mod3):
 				$p['op_mod']($mod3,$mod4)));
@@ -53015,12 +53144,12 @@ $pyjs.loaded_modules['chess'] = function (__mod_name__) {
 				var self = arguments[0];
 				teststate = arguments[1];
 			}
-			var newplayer,$add46,event_args,$mod5,$mod6,oldplayer,isLegal,$add45,event;
+			var $add50,newplayer,$add49,oldplayer,event_args,$mod5,$mod6,isLegal,event;
 			isLegal = true;
 			event = $p['list']([]);
 			event_args = $p['list']([]);
 			newplayer = teststate.__getitem__('player');
-			oldplayer = (typeof ($mod5=$p['__op_add']($add45=newplayer,$add46=1))==typeof ($mod6=2) && typeof $mod5=='number'?
+			oldplayer = (typeof ($mod5=$p['__op_add']($add49=newplayer,$add50=1))==typeof ($mod6=2) && typeof $mod5=='number'?
 				(($mod5=$mod5%$mod6)<0&&$mod6>0?$mod5+$mod6:$mod5):
 				$p['op_mod']($mod5,$mod6));
 			return $p['tuple']([isLegal, event, event_args]);
