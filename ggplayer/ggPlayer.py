@@ -77,7 +77,7 @@ class GameCanvas(GWTCanvas):
         
     """
     
-    def __init__(self, w, h, gametype):
+    def __init__(self, w, h, game):
         """ Initialize and resize the canvas; load the game.
 
         :param w:  The width of the canvas in pixels
@@ -87,79 +87,33 @@ class GameCanvas(GWTCanvas):
         
         """
         GWTCanvas.__init__(self, w, h)
-                       
+        
         self.setSize(w,h)
         self.setStyleName('drophere')
         self.setStyleAttribute('position', 'relative')
         
         self.width = w
         self.height = h
-        self.gametype = gametype
         self.images = []
         self.img_dict = []
-        self.loadGame()
+        for x in range(game.num_players):
+            self.img_dict.append({})
             
         self.run = False
-
-    def loadGame(self):
-        """Create the boardgame object; find and load images"""
-        if self.gametype == 'Chess':
-            self.game = Chess()
-            self.boardtype = self.game.boardtype
-            images = ['./images/Chess/pw.svg', './images/Chess/pb.svg',
-                  './images/Chess/Nw.svg', './images/Chess/Nb.svg',
-                  './images/Chess/Bw.svg', './images/Chess/Bb.svg',
-                  './images/Chess/Rw.svg', './images/Chess/Rb.svg',
-                  './images/Chess/Qw.svg', './images/Chess/Qb.svg',
-                  './images/Chess/Kw.svg', './images/Chess/Kb.svg']
-            for x in range(self.game.num_players):
-                self.img_dict.append({})
-        else:
-            self.boardtype = '8x8checker'
-            images = ['./images/Chess/pw.svg']
-        loadImages(images, self)
-        
-
-    def onImagesLoaded(self, imagesHandles):
-        """Associate the correct image handle with each piece type
-
-        :param imageHandles:  handles for the images in self.images
-        :type imageHandles:  list
-        
-        """
-        print "loaded images", imagesHandles
-        #Window.alert("loaded images:")
-        #Window.alert(str(self.gametype))
-        #self.drawImage(self.Pw, self.width/8, self.height/8)
-        self.img_dict[0]['p'] = imagesHandles[0]
-        self.img_dict[1]['p'] = imagesHandles[1]
-        self.img_dict[0]['N'] = imagesHandles[2]
-        self.img_dict[1]['N'] = imagesHandles[3]
-        self.img_dict[0]['B'] = imagesHandles[4]
-        self.img_dict[1]['B'] = imagesHandles[5]
-        self.img_dict[0]['R'] = imagesHandles[6]
-        self.img_dict[1]['R'] = imagesHandles[7]
-        self.img_dict[0]['Q'] = imagesHandles[8]
-        self.img_dict[1]['Q'] = imagesHandles[9]
-        self.img_dict[0]['K'] = imagesHandles[10]
-        self.img_dict[1]['K'] = imagesHandles[11]
-
-        print "resize", self.width, self.height
         self.resize(self.width, self.height)
-        self.reset()
         self.run = True
+        
 
-    def reset(self):
+    def reset(self, game):
         """Redraw the board and initialize the pieces"""
-        self.drawBoard()
-        self.initPieces()
+        self.drawBoard(game)
+        self.initPieces(game)
 
-    def drawBoard(self):
+    def drawBoard(self, game):
         """Draw all cells in the board"""
         # draw the cells
-        for cell in self.game.board.values():
+        for cell in game.board.values():
             self.drawCell(cell,COLORS)
-##	      self.restoreContext()
             
     def drawCell(self,gamecell,colors):
         """Draw a cell in the board
@@ -197,15 +151,12 @@ class GameCanvas(GWTCanvas):
         self.setFillStyle(colors[gamecell.color])
         self.fill()
         
-    def initPieces(self):
+    def initPieces(self, game):
         """Draw all pieces on their position in state"""
         #Window.alert("Drawing Pieces")
-        #img_size = (45, 45)
-        for i in self.game.board.keys():
-            #if self.game.state[i]!=[]:
-                #Window.alert("Drawing "+str(self.game.state[i]))
-            for j in self.game.state[i]:
-                self.drawPiece(self.game.pieces[j],self.game.board[i])
+        for i in game.board.keys():
+            for j in game.state[i]:
+                self.drawPiece(game.pieces[j],game.board[i])
 
     def drawPiece(self, gamepiece, cell):
         """Draw a piece in a cell
@@ -253,7 +204,17 @@ class GamePlayer(DockPanel):
         """
         DockPanel.__init__(self,HorizontalAlignment=HasAlignment.ALIGN_CENTER,Spacing=10)
         
-        self.GC = GameCanvas(width, height, gametype)
+        if gametype == 'Chess':
+            self.game = Chess()
+            self.boardtype = self.game.boardtype
+            self.images = []
+            for i in self.game.pieces:
+                self.images.append('./images/Chess/'+str(i.player)+str(i.name)+'.svg')
+            self.images = list(set(self.images))  #eliminate duplicates
+            
+        self.GC = GameCanvas(width, height, self.game)
+        loadImages(self.images, self)
+        self.GC.addMouseListener(self)
         
         self.b = Button("Make Move", self, StyleName='teststyle')
         self.cell1 = TextBox(StyleName='boxStyle')
@@ -270,26 +231,50 @@ class GamePlayer(DockPanel):
         self.add(self.GC, DockPanel.CENTER)
         self.add(self.mover, DockPanel.EAST)
 
+
+    def onMouseUp(self, sender, x, y):
+        mousex = float(x)/BOARDWIDTH
+        mousey = float(y)/BOARDHEIGHT
+        #clickcell = self.game.whichCell(mousex,mousey)
+        
+        
     def onClick(self,sender):
         """Execute a move in the game; redraw the board"""
         if sender == self.b:
             cell1_txt = self.cell1.getText()
             cell2_txt = self.cell2.getText()
             #Window.alert(str(cell1_txt))
-            if cell1_txt and cell2_txt in self.GC.game.board:
-                piece = self.GC.game.pieces[self.GC.game.state[cell1_txt][len(self.GC.game.state[cell1_txt])-1]]
+            if cell1_txt and cell2_txt in self.game.board:
+                piece = self.game.pieces[self.game.state[cell1_txt][len(self.game.state[cell1_txt])-1]]
                 origcell = piece.location
-                cell = self.GC.game.board[cell2_txt]
-                didMove = self.GC.game.make_move(piece, cell)
+                cell = self.game.board[cell2_txt]
+                didMove = self.game.make_move(piece, cell)
                 if didMove:
-                    self.GC.drawCell(self.GC.game.board[origcell], COLORS)
-                    for j in self.GC.game.state[origcell]:
-                        self.GC.drawPiece(self.GC.game.pieces[j], self.GC.game.board[origcell])
+                    self.GC.drawCell(self.game.board[origcell], COLORS)
+                    for j in self.game.state[origcell]:
+                        self.GC.drawPiece(self.game.pieces[j], self.game.board[origcell])
                     self.GC.drawPiece(piece, cell)
             else:
                 Window.alert("cell names not recognized!")
             self.cell1.setText("")
             self.cell2.setText("")
+
+    def onImagesLoaded(self, imagesHandles):
+        """Associate the correct image handle with each piece type
+
+        :param imageHandles:  handles for the images in self.images
+        :type imageHandles:  list
+        
+        """
+        #Window.alert("loading images")
+        for i in self.images:
+            substr = i.split('/')
+            img = substr.pop()
+            p = int(img[0])
+            name = img[1:img.find('.')]
+            self.GC.img_dict[p][name] = imagesHandles[self.images.index(i)]
+            
+        self.GC.reset(self.game)
 
 
 if __name__ == '__main__':
