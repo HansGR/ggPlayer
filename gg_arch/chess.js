@@ -403,6 +403,25 @@ $pyjs.loaded_modules['chess'] = function (__mod_name__) {
 		}
 	, 1, [null,null,['self'],['teststate']]);
 		$cls_definition['isLegalState'] = $method;
+		$method = $pyjs__bind_method2('whichCell', function(x, y) {
+			if (this.__is_instance__ === true) {
+				var self = this;
+			} else {
+				var self = arguments[0];
+				x = arguments[1];
+				y = arguments[2];
+			}
+			var files,$add51,$add52,ranks,$mul4,$mul3,$mul2,$mul1;
+			files = 'abcdefgh';
+			ranks = '87654321';
+			return $p['__op_add']($add51=files.__getitem__($p['float_int']((typeof ($mul1=x)==typeof ($mul2=8) && typeof $mul1=='number'?
+				$mul1*$mul2:
+				$p['op_mul']($mul1,$mul2)))),$add52=ranks.__getitem__($p['float_int']((typeof ($mul3=y)==typeof ($mul4=8) && typeof $mul3=='number'?
+				$mul3*$mul4:
+				$p['op_mul']($mul3,$mul4)))));
+		}
+	, 1, [null,null,['self'],['x'],['y']]);
+		$cls_definition['whichCell'] = $method;
 		var $bases = new Array($m['Boardgame']);
 		var $data = $p['dict']();
 		for (var $item in $cls_definition) { $data.__setitem__($item, $cls_definition[$item]); }

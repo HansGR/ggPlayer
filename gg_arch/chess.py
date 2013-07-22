@@ -261,4 +261,19 @@ class Chess (Boardgame):
         # Look for checkmate
         
         return isLegal, event, event_args
+
+
+    def whichCell(self, x, y):
+        """Return which cell ID contains the geometric coordinates [x,y].
+
+        A more efficient overwrite of the default function which queries each cell until it gets a result.
+
+        :param x:  x coordinate query relative to board; range [0,1]
+        :type x:  float
+        :param y:  y coordinate query relative to board; range [0,1]
+        :type y:  float
         
+        """
+        files = 'abcdefgh'
+        ranks = '87654321'
+        return files[int(x*8)]+ranks[int(y*8)]

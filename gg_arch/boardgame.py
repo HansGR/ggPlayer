@@ -123,3 +123,10 @@ class Boardgame(object):
     def doEvent(self, event, args):
         """Generic execute an event precipitated by a move (e.g. king in check, kill piece, ..."""
         return True
+
+    def whichCell(self, x, y):
+        """Generic find which cell ID contains the geometric coordinates [x,y]"""
+        for i in self.board.keys():
+            if self.board[i].isInCell(x,y):
+                return i
+        return False

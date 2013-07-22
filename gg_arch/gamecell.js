@@ -80,6 +80,26 @@ $pyjs.loaded_modules['gamecell'] = function (__mod_name__) {
 		}
 	, 1, [null,null,['self']]);
 		$cls_definition['getSize'] = $method;
+		$method = $pyjs__bind_method2('isInCell', function(xcoord, ycoord) {
+			if (this.__is_instance__ === true) {
+				var self = this;
+			} else {
+				var self = arguments[0];
+				xcoord = arguments[1];
+				ycoord = arguments[2];
+			}
+			var $add12,h,$and3,$and4,$add10,w,$and1,y,x,$add9,$and2,$add11;
+			if ($p['bool']($p['op_eq']($p['getattr'](self, 'shape'), 'rect'))) {
+				x = $p['getattr'](self, 'params').__getitem__(0);
+				y = $p['getattr'](self, 'params').__getitem__(1);
+				w = $p['getattr'](self, 'params').__getitem__(2);
+				h = $p['getattr'](self, 'params').__getitem__(3);
+				return ($p['bool']($and1=((($p['cmp'](xcoord, x))|1) == 1))?($p['bool']($and2=($p['cmp'](xcoord, $p['__op_add']($add9=x,$add10=w)) == -1))?($p['bool']($and3=((($p['cmp'](ycoord, y))|1) == 1))?($p['cmp'](ycoord, $p['__op_add']($add11=y,$add12=h)) == -1):$and3):$and2):$and1);
+			}
+			return false;
+		}
+	, 1, [null,null,['self'],['xcoord'],['ycoord']]);
+		$cls_definition['isInCell'] = $method;
 		var $bases = new Array($p['object']);
 		var $data = $p['dict']();
 		for (var $item in $cls_definition) { $data.__setitem__($item, $cls_definition[$item]); }

@@ -50,6 +50,7 @@ $pyjs.loaded_modules['ggPlayer'] = function (__mod_name__) {
 	$m['LIGHT'] = $m['Color']['Color']('#FDE6BE');
 	$m['DARK'] = $m['Color']['Color']('#695532');
 	$m['COLORS'] = $p['list']([$m['LIGHT'], $m['DARK']]);
+	$m['SELECT'] = $m['Color']['Color']('#FF0000');
 	$m['GameCanvas'] = (function(){
 		var $cls_definition = new Object();
 		var $method;
@@ -117,13 +118,12 @@ $pyjs.loaded_modules['ggPlayer'] = function (__mod_name__) {
 		}
 	, 1, [null,null,['self'],['game']]);
 		$cls_definition['drawBoard'] = $method;
-		$method = $pyjs__bind_method2('drawCell', function(gamecell, colors) {
+		$method = $pyjs__bind_method2('drawCellPath', function(gamecell) {
 			if (this.__is_instance__ === true) {
 				var self = this;
 			} else {
 				var self = arguments[0];
 				gamecell = arguments[1];
-				colors = arguments[2];
 			}
 			var xi,$iter4_type,y1,y2,$iter4_iter,$iter4_idx,r,yi,$add14,$add10,$add11,$add12,$add13,x2,path,x1,$iter4_nextval,j,pathtype,$add2,$add3,$add1,$add6,$add7,$add4,$add5,$iter4_array,$add8,$add9;
 			var $tupleassign1 = $p['__ass_unpack'](gamecell['getPath'](), 2, null);
@@ -173,12 +173,41 @@ $pyjs.loaded_modules['ggPlayer'] = function (__mod_name__) {
 				}
 			}
 			self['closePath']();
+			return null;
+		}
+	, 1, [null,null,['self'],['gamecell']]);
+		$cls_definition['drawCellPath'] = $method;
+		$method = $pyjs__bind_method2('drawCell', function(gamecell, colors) {
+			if (this.__is_instance__ === true) {
+				var self = this;
+			} else {
+				var self = arguments[0];
+				gamecell = arguments[1];
+				colors = arguments[2];
+			}
+
+			self['drawCellPath'](gamecell);
 			self['setFillStyle'](colors.__getitem__($p['getattr'](gamecell, 'color')));
 			self['fill']();
 			return null;
 		}
 	, 1, [null,null,['self'],['gamecell'],['colors']]);
 		$cls_definition['drawCell'] = $method;
+		$method = $pyjs__bind_method2('drawSelection', function(gamecell) {
+			if (this.__is_instance__ === true) {
+				var self = this;
+			} else {
+				var self = arguments[0];
+				gamecell = arguments[1];
+			}
+
+			self['drawCellPath'](gamecell);
+			self['setStrokeStyle']($m['SELECT']);
+			self['stroke']();
+			return null;
+		}
+	, 1, [null,null,['self'],['gamecell']]);
+		$cls_definition['drawSelection'] = $method;
 		$method = $pyjs__bind_method2('initPieces', function(game) {
 			if (this.__is_instance__ === true) {
 				var self = this;
@@ -244,6 +273,7 @@ $pyjs.loaded_modules['ggPlayer'] = function (__mod_name__) {
 		var $cls_definition = new Object();
 		var $method;
 		$cls_definition.__module__ = 'ggPlayer';
+		$cls_definition['selectedCell'] = $p['list']([]);
 		$method = $pyjs__bind_method2('__init__', function(width, height, gametype) {
 			if (this.__is_instance__ === true) {
 				var self = this;
@@ -285,6 +315,31 @@ $pyjs.loaded_modules['ggPlayer'] = function (__mod_name__) {
 		}
 	, 1, [null,null,['self'],['width'],['height'],['gametype']]);
 		$cls_definition['__init__'] = $method;
+		$method = $pyjs__bind_method2('GUImove', function(piece, cell) {
+			if (this.__is_instance__ === true) {
+				var self = this;
+			} else {
+				var self = arguments[0];
+				piece = arguments[1];
+				cell = arguments[2];
+			}
+			var $iter8_iter,$iter8_idx,didMove,j,$iter8_array,$iter8_nextval,origcell,$iter8_type;
+			origcell = $p['getattr'](piece, 'location');
+			didMove = self['game']['make_move'](piece, cell);
+			if ($p['bool'](didMove)) {
+				self['GC']['drawCell']($p['getattr']($p['getattr'](self, 'game'), 'board').__getitem__(origcell), $m['COLORS']);
+				$iter8_iter = $p['getattr']($p['getattr'](self, 'game'), 'state').__getitem__(origcell);
+				$iter8_nextval=$p['__iter_prepare']($iter8_iter,false);
+				while (typeof($p['__wrapped_next']($iter8_nextval).$nextval) != 'undefined') {
+					j = $iter8_nextval.$nextval;
+					self['GC']['drawPiece']($p['getattr']($p['getattr'](self, 'game'), 'pieces').__getitem__(j), $p['getattr']($p['getattr'](self, 'game'), 'board').__getitem__(origcell));
+				}
+				self['GC']['drawPiece'](piece, cell);
+			}
+			return null;
+		}
+	, 1, [null,null,['self'],['piece'],['cell']]);
+		$cls_definition['GUImove'] = $method;
 		$method = $pyjs__bind_method2('onMouseUp', function(sender, x, y) {
 			if (this.__is_instance__ === true) {
 				var self = this;
@@ -294,14 +349,46 @@ $pyjs.loaded_modules['ggPlayer'] = function (__mod_name__) {
 				x = arguments[2];
 				y = arguments[3];
 			}
-			var $add21,$add22,$add24,$div2,mousey,mousex,$div3,$div1,$add23,$div4;
+			var j,$iter10_nextval,$iter10_iter,$iter9_iter,$iter9_nextval,$iter9_idx,cell,$sub3,$sub2,$sub1,$iter9_type,$sub4,$iter10_idx,$iter10_type,$div2,$div3,$div1,$div4,clickcell,i,clickpieceID,piecelist,$iter10_array,mousey,mousex,piece,$iter9_array;
 			mousex = (typeof ($div1=$p['float'](x))==typeof ($div2=$m['BOARDWIDTH']) && typeof $div1=='number' && $div2 !== 0?
 				$div1/$div2:
 				$p['op_div']($div1,$div2));
 			mousey = (typeof ($div3=$p['float'](y))==typeof ($div4=$m['BOARDHEIGHT']) && typeof $div3=='number' && $div4 !== 0?
 				$div3/$div4:
 				$p['op_div']($div3,$div4));
-			$m['Window']['alert']($p['__op_add']($add23=$p['__op_add']($add21=$p['str'](x),$add22=' '),$add24=$p['str'](y)));
+			clickcell = self['game']['whichCell'](mousex, mousey);
+			clickpieceID = $p['getattr']($p['getattr'](self, 'game'), 'state').__getitem__(clickcell);
+			if ($p['bool']($p['op_eq']($p['len']($p['getattr'](self, 'selectedCell')), 0))) {
+				if ($p['bool']($p['op_eq']($p['len'](clickpieceID), 0))) {
+				}
+				else if ($p['bool'](!$p['op_eq']($p['getattr']($p['getattr']($p['getattr'](self, 'game'), 'pieces').__getitem__(clickpieceID.__getitem__($p['__op_sub']($sub1=$p['len'](clickpieceID),$sub2=1))), 'player'), $p['getattr']($p['getattr'](self, 'game'), 'state').__getitem__('player')))) {
+				}
+				else {
+					self['selectedCell']['append'](clickcell);
+				}
+			}
+			else if ($p['bool']($p['op_eq']($p['getattr'](self, 'selectedCell').__getitem__(0), clickcell))) {
+				self['selectedCell']['remove'](clickcell);
+				self['GC']['drawCell']($p['getattr']($p['getattr'](self, 'game'), 'board').__getitem__(clickcell), $m['COLORS']);
+				$iter9_iter = $p['getattr']($p['getattr'](self, 'game'), 'state').__getitem__(clickcell);
+				$iter9_nextval=$p['__iter_prepare']($iter9_iter,false);
+				while (typeof($p['__wrapped_next']($iter9_nextval).$nextval) != 'undefined') {
+					j = $iter9_nextval.$nextval;
+					self['GC']['drawPiece']($p['getattr']($p['getattr'](self, 'game'), 'pieces').__getitem__(j), $p['getattr']($p['getattr'](self, 'game'), 'board').__getitem__(clickcell));
+				}
+			}
+			else {
+				piecelist = $p['getattr']($p['getattr'](self, 'game'), 'state').__getitem__(self['selectedCell']['pop']());
+				piece = $p['getattr']($p['getattr'](self, 'game'), 'pieces').__getitem__(piecelist.__getitem__($p['__op_sub']($sub3=$p['len'](piecelist),$sub4=1)));
+				cell = $p['getattr']($p['getattr'](self, 'game'), 'board').__getitem__(clickcell);
+				self['GUImove'](piece, cell);
+			}
+			$iter10_iter = $p['getattr'](self, 'selectedCell');
+			$iter10_nextval=$p['__iter_prepare']($iter10_iter,false);
+			while (typeof($p['__wrapped_next']($iter10_nextval).$nextval) != 'undefined') {
+				i = $iter10_nextval.$nextval;
+				self['GC']['drawSelection']($p['getattr']($p['getattr'](self, 'game'), 'board').__getitem__(i));
+			}
 			return null;
 		}
 	, 1, [null,null,['self'],['sender'],['x'],['y']]);
@@ -313,25 +400,14 @@ $pyjs.loaded_modules['ggPlayer'] = function (__mod_name__) {
 				var self = arguments[0];
 				sender = arguments[1];
 			}
-			var $iter8_iter,origcell,$iter8_idx,didMove,$and1,j,$iter8_array,cell,$iter8_nextval,cell2_txt,$sub2,$iter8_type,cell1_txt,$sub1,piece,$and2;
+			var $and1,$sub6,cell,cell2_txt,cell1_txt,piece,$and2,$sub5;
 			if ($p['bool']($p['op_eq'](sender, $p['getattr'](self, 'b')))) {
 				cell1_txt = self['cell1']['getText']();
 				cell2_txt = self['cell2']['getText']();
 				if ($p['bool'](($p['bool']($and1=cell1_txt)?$p['getattr']($p['getattr'](self, 'game'), 'board').__contains__(cell2_txt):$and1))) {
-					piece = $p['getattr']($p['getattr'](self, 'game'), 'pieces').__getitem__($p['getattr']($p['getattr'](self, 'game'), 'state').__getitem__(cell1_txt).__getitem__($p['__op_sub']($sub1=$p['len']($p['getattr']($p['getattr'](self, 'game'), 'state').__getitem__(cell1_txt)),$sub2=1)));
-					origcell = $p['getattr'](piece, 'location');
+					piece = $p['getattr']($p['getattr'](self, 'game'), 'pieces').__getitem__($p['getattr']($p['getattr'](self, 'game'), 'state').__getitem__(cell1_txt).__getitem__($p['__op_sub']($sub5=$p['len']($p['getattr']($p['getattr'](self, 'game'), 'state').__getitem__(cell1_txt)),$sub6=1)));
 					cell = $p['getattr']($p['getattr'](self, 'game'), 'board').__getitem__(cell2_txt);
-					didMove = self['game']['make_move'](piece, cell);
-					if ($p['bool'](didMove)) {
-						self['GC']['drawCell']($p['getattr']($p['getattr'](self, 'game'), 'board').__getitem__(origcell), $m['COLORS']);
-						$iter8_iter = $p['getattr']($p['getattr'](self, 'game'), 'state').__getitem__(origcell);
-						$iter8_nextval=$p['__iter_prepare']($iter8_iter,false);
-						while (typeof($p['__wrapped_next']($iter8_nextval).$nextval) != 'undefined') {
-							j = $iter8_nextval.$nextval;
-							self['GC']['drawPiece']($p['getattr']($p['getattr'](self, 'game'), 'pieces').__getitem__(j), $p['getattr']($p['getattr'](self, 'game'), 'board').__getitem__(origcell));
-						}
-						self['GC']['drawPiece'](piece, cell);
-					}
+					self['GUImove'](piece, cell);
 				}
 				else {
 					$m['Window']['alert']('cell names not recognized!');
@@ -350,11 +426,11 @@ $pyjs.loaded_modules['ggPlayer'] = function (__mod_name__) {
 				var self = arguments[0];
 				imagesHandles = arguments[1];
 			}
-			var name,img,$iter9_iter,i,$iter9_nextval,$iter9_idx,p,$iter9_array,substr,$iter9_type;
-			$iter9_iter = $p['getattr'](self, 'images');
-			$iter9_nextval=$p['__iter_prepare']($iter9_iter,false);
-			while (typeof($p['__wrapped_next']($iter9_nextval).$nextval) != 'undefined') {
-				i = $iter9_nextval.$nextval;
+			var name,img,p,i,$iter11_iter,$iter11_type,substr,$iter11_array,$iter11_nextval,$iter11_idx;
+			$iter11_iter = $p['getattr'](self, 'images');
+			$iter11_nextval=$p['__iter_prepare']($iter11_iter,false);
+			while (typeof($p['__wrapped_next']($iter11_nextval).$nextval) != 'undefined') {
+				i = $iter11_nextval.$nextval;
 				substr = i['$$split']('/');
 				img = substr['pop']();
 				p = $p['float_int'](img.__getitem__(0));

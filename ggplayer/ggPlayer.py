@@ -63,6 +63,7 @@ GAMENAME = 'Chess'
 LIGHT = Color.Color('#FDE6BE')
 DARK = Color.Color('#695532')
 COLORS = [LIGHT,DARK]
+SELECT = Color.Color('#FF0000')
 
 class GameCanvas(GWTCanvas):
     """Canvas containing the gameboard
@@ -114,16 +115,9 @@ class GameCanvas(GWTCanvas):
         # draw the cells
         for cell in game.board.values():
             self.drawCell(cell,COLORS)
-            
-    def drawCell(self,gamecell,colors):
-        """Draw a cell in the board
 
-        :param cell:  gamecell to draw
-        :type cell:  gamecell object
-        :param colors:  Cell colors used in this board
-        :type colors:  list
-        
-        """
+    def drawCellPath(self, gamecell):
+        """Helper function, draw the border path of a cell"""
         path, pathtype = gamecell.getPath()
         path = [[a*self.width,b*self.height] for a,b in path]
         
@@ -148,9 +142,26 @@ class GameCanvas(GWTCanvas):
             else:
                 pass
         self.closePath()
+        
+    def drawCell(self,gamecell,colors):
+        """Draw a cell in the board
+
+        :param cell:  gamecell to draw
+        :type cell:  gamecell object
+        :param colors:  Cell colors used in this board
+        :type colors:  list
+        
+        """
+        self.drawCellPath(gamecell)
         self.setFillStyle(colors[gamecell.color])
         self.fill()
-        
+
+    def drawSelection(self, gamecell):
+        """Draw a selection around the stated cell"""
+        self.drawCellPath(gamecell)
+        self.setStrokeStyle(SELECT)
+        self.stroke()
+
     def initPieces(self, game):
         """Draw all pieces on their position in state"""
         #Window.alert("Drawing Pieces")
@@ -176,6 +187,7 @@ class GameCanvas(GWTCanvas):
         w = int(wi*self.width)
         h = int(wi*self.height)
         self.drawImage(img, 0, 0, 45, 45, x, y, w, h)
+        
 
 class GamePlayer(DockPanel):
     """ The GamePlayer widget, containing game canvas and controls
@@ -187,11 +199,14 @@ class GamePlayer(DockPanel):
         cell2 (TextBox):  Destination cell for a piece move
         cellPanel (HorizontalPanel):  Panel containing cell1 and cell2
         mover (VerticalPanel):  Panel containing cellPanel and b
+        selectedCell (list):  list of cell IDs that are currently selected
         
     Note:
         it might be a good idea to move the game proper out of the GameCanvas object
         - references and game-functions are kind of long
     """
+    selectedCell = []
+    
     def __init__(self, width, height, gametype):
         """Initialize the GameCanvas and construct the layout
 
@@ -232,28 +247,56 @@ class GamePlayer(DockPanel):
         self.add(self.mover, DockPanel.EAST)
 
 
+    def GUImove(self, piece, cell):
+        """Execute a move in the game; redraw the board"""
+        origcell = piece.location
+        didMove = self.game.make_move(piece, cell)
+        if didMove:
+            self.GC.drawCell(self.game.board[origcell], COLORS)
+            for j in self.game.state[origcell]:
+                self.GC.drawPiece(self.game.pieces[j], self.game.board[origcell])
+            self.GC.drawPiece(piece, cell)
+                    
+
     def onMouseUp(self, sender, x, y):
         mousex = float(x)/BOARDWIDTH
         mousey = float(y)/BOARDHEIGHT
-        #clickcell = self.game.whichCell(mousex,mousey)
-        
+        clickcell = self.game.whichCell(mousex,mousey)
+        clickpieceID = self.game.state[clickcell]
+        #If no cell is selected, make this cell selected.
+        if len(self.selectedCell)==0:
+            #If piece on this cell is not active or no piece on this cell, don't select
+            if len(clickpieceID)==0:
+                pass
+            elif self.game.pieces[clickpieceID[len(clickpieceID)-1]].player!=self.game.state['player']:
+                pass
+            else:
+                self.selectedCell.append(clickcell)
+        #If this cell is selected, unselect this cell
+        elif self.selectedCell[0]==clickcell:
+            self.selectedCell.remove(clickcell)
+            self.GC.drawCell(self.game.board[clickcell], COLORS)
+            for j in self.game.state[clickcell]:
+                self.GC.drawPiece(self.game.pieces[j], self.game.board[clickcell])
+        #If another cell is selected, query piece on that cell, call GUImove, clear selected
+        else:
+            piecelist = self.game.state[self.selectedCell.pop()]
+            piece = self.game.pieces[piecelist[len(piecelist)-1]]
+            cell = self.game.board[clickcell]
+            self.GUImove(piece, cell)
+        for i in self.selectedCell:
+            self.GC.drawSelection(self.game.board[i])
         
     def onClick(self,sender):
-        """Execute a move in the game; redraw the board"""
+        """Call function for the text/button-based move controller"""
         if sender == self.b:
             cell1_txt = self.cell1.getText()
             cell2_txt = self.cell2.getText()
             #Window.alert(str(cell1_txt))
             if cell1_txt and cell2_txt in self.game.board:
                 piece = self.game.pieces[self.game.state[cell1_txt][len(self.game.state[cell1_txt])-1]]
-                origcell = piece.location
                 cell = self.game.board[cell2_txt]
-                didMove = self.game.make_move(piece, cell)
-                if didMove:
-                    self.GC.drawCell(self.game.board[origcell], COLORS)
-                    for j in self.game.state[origcell]:
-                        self.GC.drawPiece(self.game.pieces[j], self.game.board[origcell])
-                    self.GC.drawPiece(piece, cell)
+                self.GUImove(piece, cell)
             else:
                 Window.alert("cell names not recognized!")
             self.cell1.setText("")

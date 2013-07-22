@@ -162,6 +162,27 @@ $pyjs.loaded_modules['boardgame'] = function (__mod_name__) {
 		}
 	, 1, [null,null,['self'],['event'],['args']]);
 		$cls_definition['doEvent'] = $method;
+		$method = $pyjs__bind_method2('whichCell', function(x, y) {
+			if (this.__is_instance__ === true) {
+				var self = this;
+			} else {
+				var self = arguments[0];
+				x = arguments[1];
+				y = arguments[2];
+			}
+			var $iter1_nextval,$iter1_type,i,$iter1_iter,$iter1_array,$iter1_idx;
+			$iter1_iter = self['board']['keys']();
+			$iter1_nextval=$p['__iter_prepare']($iter1_iter,false);
+			while (typeof($p['__wrapped_next']($iter1_nextval).$nextval) != 'undefined') {
+				i = $iter1_nextval.$nextval;
+				if ($p['bool']($p['getattr'](self, 'board').__getitem__(i)['isInCell'](x, y))) {
+					return i;
+				}
+			}
+			return false;
+		}
+	, 1, [null,null,['self'],['x'],['y']]);
+		$cls_definition['whichCell'] = $method;
 		var $bases = new Array($p['object']);
 		var $data = $p['dict']();
 		for (var $item in $cls_definition) { $data.__setitem__($item, $cls_definition[$item]); }

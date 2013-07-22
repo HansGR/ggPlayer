@@ -76,3 +76,14 @@ class gameCell(object):
         """
         if self.shape=='rect':
             return self.params[2], self.params[3]
+
+    def isInCell(self, xcoord, ycoord):
+        """Return True if the coordinates [x,y] are within the cell"""
+        if self.shape=='rect':
+            x = self.params[0]
+            y = self.params[1]
+            w = self.params[2]
+            h = self.params[3]
+            return (xcoord>=x) and (xcoord<(x+w)) and (ycoord>=y) and (ycoord<(y+h))
+        
+        return False
