@@ -255,13 +255,39 @@ class Chess (Boardgame):
         
         # LEGAL STATES with EVENTS:
         # Look for capture
-        
+        for cell in teststate.keys():
+            if cell != 'player':
+                if len(teststate[cell])>1:
+                    event.append('capture')
+                    event_args.append(cell)
+
         # Look for pawn promotion
+        rplayer = {'8': 0,'1': 1}
+        for f in 'abcdefgh':
+            for r in '18':
+                cell = f+r
+                if len(teststate[cell])>0:
+                    cellpiece = self.pieces[teststate[cell][len(teststate[cell])-1]]
+                    if cellpiece.name == 'p' and cellpiece.player == rplayer[r]:
+                        event.append('pawnup')
+                        event_args.append(cellpiece.ID)
+            
+        # Look for check
 
         # Look for checkmate
         
         return isLegal, event, event_args
 
+    def doEvent(self, event, args):
+        """Execute an event precipitated by a move"""
+        for i in range(len(event)):
+            if event[i]=='capture':
+                killed = self.state[args[i]].pop(0)
+                self.pieces[killed].location = ''
+            elif event[i]=='pawnup':
+                #Need to figure out how to ask what type to replace as at GUI level
+                self.pieces[args[i]].name = 'Q'
+        return True
 
     def whichCell(self, x, y):
         """Return which cell ID contains the geometric coordinates [x,y].

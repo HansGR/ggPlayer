@@ -95,7 +95,7 @@ $pyjs.loaded_modules['ggPlayer'] = function (__mod_name__) {
 			}
 
 			self['drawBoard'](game);
-			self['initPieces'](game);
+			self['drawPieces'](game);
 			return null;
 		}
 	, 1, [null,null,['self'],['game']]);
@@ -202,13 +202,13 @@ $pyjs.loaded_modules['ggPlayer'] = function (__mod_name__) {
 			}
 
 			self['drawCellPath'](gamecell);
-			self['setStrokeStyle']($m['SELECT']);
-			self['stroke']();
+			self['setFillStyle']($m['SELECT']);
+			self['fill']();
 			return null;
 		}
 	, 1, [null,null,['self'],['gamecell']]);
 		$cls_definition['drawSelection'] = $method;
-		$method = $pyjs__bind_method2('initPieces', function(game) {
+		$method = $pyjs__bind_method2('drawPieces', function(game) {
 			if (this.__is_instance__ === true) {
 				var self = this;
 			} else {
@@ -230,7 +230,7 @@ $pyjs.loaded_modules['ggPlayer'] = function (__mod_name__) {
 			return null;
 		}
 	, 1, [null,null,['self'],['game']]);
-		$cls_definition['initPieces'] = $method;
+		$cls_definition['drawPieces'] = $method;
 		$method = $pyjs__bind_method2('drawPiece', function(gamepiece, cell) {
 			if (this.__is_instance__ === true) {
 				var self = this;
@@ -323,19 +323,9 @@ $pyjs.loaded_modules['ggPlayer'] = function (__mod_name__) {
 				piece = arguments[1];
 				cell = arguments[2];
 			}
-			var $iter8_iter,$iter8_idx,didMove,j,$iter8_array,$iter8_nextval,origcell,$iter8_type;
-			origcell = $p['getattr'](piece, 'location');
+			var didMove;
 			didMove = self['game']['make_move'](piece, cell);
-			if ($p['bool'](didMove)) {
-				self['GC']['drawCell']($p['getattr']($p['getattr'](self, 'game'), 'board').__getitem__(origcell), $m['COLORS']);
-				$iter8_iter = $p['getattr']($p['getattr'](self, 'game'), 'state').__getitem__(origcell);
-				$iter8_nextval=$p['__iter_prepare']($iter8_iter,false);
-				while (typeof($p['__wrapped_next']($iter8_nextval).$nextval) != 'undefined') {
-					j = $iter8_nextval.$nextval;
-					self['GC']['drawPiece']($p['getattr']($p['getattr'](self, 'game'), 'pieces').__getitem__(j), $p['getattr']($p['getattr'](self, 'game'), 'board').__getitem__(origcell));
-				}
-				self['GC']['drawPiece'](piece, cell);
-			}
+			self['GC']['reset']($p['getattr'](self, 'game'));
 			return null;
 		}
 	, 1, [null,null,['self'],['piece'],['cell']]);
@@ -349,7 +339,7 @@ $pyjs.loaded_modules['ggPlayer'] = function (__mod_name__) {
 				x = arguments[2];
 				y = arguments[3];
 			}
-			var j,$iter10_nextval,$iter10_iter,$iter9_iter,$iter9_nextval,$iter9_idx,cell,$sub3,$sub2,$sub1,$iter9_type,$sub4,$iter10_idx,$iter10_type,$div2,$div3,$div1,$div4,clickcell,i,clickpieceID,piecelist,$iter10_array,mousey,mousex,piece,$iter9_array;
+			var j,$iter8_iter,$iter9_iter,$iter9_nextval,$iter9_idx,cell,$sub3,$sub2,$sub1,$iter9_type,$sub4,$iter8_idx,$iter8_type,$iter8_nextval,$div2,$div3,$div1,$div4,clickcell,i,clickpieceID,piecelist,$iter8_array,mousey,mousex,piece,$iter9_array;
 			mousex = (typeof ($div1=$p['float'](x))==typeof ($div2=$m['BOARDWIDTH']) && typeof $div1=='number' && $div2 !== 0?
 				$div1/$div2:
 				$p['op_div']($div1,$div2));
@@ -369,13 +359,6 @@ $pyjs.loaded_modules['ggPlayer'] = function (__mod_name__) {
 			}
 			else if ($p['bool']($p['op_eq']($p['getattr'](self, 'selectedCell').__getitem__(0), clickcell))) {
 				self['selectedCell']['remove'](clickcell);
-				self['GC']['drawCell']($p['getattr']($p['getattr'](self, 'game'), 'board').__getitem__(clickcell), $m['COLORS']);
-				$iter9_iter = $p['getattr']($p['getattr'](self, 'game'), 'state').__getitem__(clickcell);
-				$iter9_nextval=$p['__iter_prepare']($iter9_iter,false);
-				while (typeof($p['__wrapped_next']($iter9_nextval).$nextval) != 'undefined') {
-					j = $iter9_nextval.$nextval;
-					self['GC']['drawPiece']($p['getattr']($p['getattr'](self, 'game'), 'pieces').__getitem__(j), $p['getattr']($p['getattr'](self, 'game'), 'board').__getitem__(clickcell));
-				}
 			}
 			else {
 				piecelist = $p['getattr']($p['getattr'](self, 'game'), 'state').__getitem__(self['selectedCell']['pop']());
@@ -383,11 +366,18 @@ $pyjs.loaded_modules['ggPlayer'] = function (__mod_name__) {
 				cell = $p['getattr']($p['getattr'](self, 'game'), 'board').__getitem__(clickcell);
 				self['GUImove'](piece, cell);
 			}
-			$iter10_iter = $p['getattr'](self, 'selectedCell');
-			$iter10_nextval=$p['__iter_prepare']($iter10_iter,false);
-			while (typeof($p['__wrapped_next']($iter10_nextval).$nextval) != 'undefined') {
-				i = $iter10_nextval.$nextval;
+			self['GC']['reset']($p['getattr'](self, 'game'));
+			$iter8_iter = $p['getattr'](self, 'selectedCell');
+			$iter8_nextval=$p['__iter_prepare']($iter8_iter,false);
+			while (typeof($p['__wrapped_next']($iter8_nextval).$nextval) != 'undefined') {
+				i = $iter8_nextval.$nextval;
 				self['GC']['drawSelection']($p['getattr']($p['getattr'](self, 'game'), 'board').__getitem__(i));
+				$iter9_iter = $p['getattr']($p['getattr'](self, 'game'), 'state').__getitem__(i);
+				$iter9_nextval=$p['__iter_prepare']($iter9_iter,false);
+				while (typeof($p['__wrapped_next']($iter9_nextval).$nextval) != 'undefined') {
+					j = $iter9_nextval.$nextval;
+					self['GC']['drawPiece']($p['getattr']($p['getattr'](self, 'game'), 'pieces').__getitem__(j), $p['getattr']($p['getattr'](self, 'game'), 'board').__getitem__(i));
+				}
 			}
 			return null;
 		}
@@ -426,11 +416,11 @@ $pyjs.loaded_modules['ggPlayer'] = function (__mod_name__) {
 				var self = arguments[0];
 				imagesHandles = arguments[1];
 			}
-			var name,img,p,i,$iter11_iter,$iter11_type,substr,$iter11_array,$iter11_nextval,$iter11_idx;
-			$iter11_iter = $p['getattr'](self, 'images');
-			$iter11_nextval=$p['__iter_prepare']($iter11_iter,false);
-			while (typeof($p['__wrapped_next']($iter11_nextval).$nextval) != 'undefined') {
-				i = $iter11_nextval.$nextval;
+			var $iter10_nextval,name,img,p,i,$iter10_idx,$iter10_array,substr,$iter10_type,$iter10_iter;
+			$iter10_iter = $p['getattr'](self, 'images');
+			$iter10_nextval=$p['__iter_prepare']($iter10_iter,false);
+			while (typeof($p['__wrapped_next']($iter10_nextval).$nextval) != 'undefined') {
+				i = $iter10_nextval.$nextval;
 				substr = i['$$split']('/');
 				img = substr['pop']();
 				p = $p['float_int'](img.__getitem__(0));

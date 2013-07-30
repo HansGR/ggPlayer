@@ -391,7 +391,7 @@ $pyjs.loaded_modules['chess'] = function (__mod_name__) {
 				var self = arguments[0];
 				teststate = arguments[1];
 			}
-			var $add50,newplayer,$add49,oldplayer,event_args,$mod5,$mod6,isLegal,event;
+			var $iter18_type,$iter18_iter,$mod5,$mod6,$and22,$and23,$iter17_type,event,$iter17_iter,$add49,$iter19_nextval,cell,$iter19_iter,$iter18_idx,r,$iter18_nextval,$sub7,$iter17_nextval,rplayer,isLegal,oldplayer,$sub8,event_args,$iter19_array,$iter17_array,cellpiece,$add50,$add51,$add52,$iter19_idx,newplayer,$iter18_array,f,$iter19_type,$iter17_idx;
 			isLegal = true;
 			event = $p['list']([]);
 			event_args = $p['list']([]);
@@ -399,10 +399,65 @@ $pyjs.loaded_modules['chess'] = function (__mod_name__) {
 			oldplayer = (typeof ($mod5=$p['__op_add']($add49=newplayer,$add50=1))==typeof ($mod6=2) && typeof $mod5=='number'?
 				(($mod5=$mod5%$mod6)<0&&$mod6>0?$mod5+$mod6:$mod5):
 				$p['op_mod']($mod5,$mod6));
+			$iter17_iter = teststate['keys']();
+			$iter17_nextval=$p['__iter_prepare']($iter17_iter,false);
+			while (typeof($p['__wrapped_next']($iter17_nextval).$nextval) != 'undefined') {
+				cell = $iter17_nextval.$nextval;
+				if ($p['bool'](!$p['op_eq'](cell, 'player'))) {
+					if ($p['bool'](($p['cmp']($p['len'](teststate.__getitem__(cell)), 1) == 1))) {
+						event['append']('capture');
+						event_args['append'](cell);
+					}
+				}
+			}
+			rplayer = $p['dict']([['8', 0], ['1', 1]]);
+			$iter18_iter = 'abcdefgh';
+			$iter18_nextval=$p['__iter_prepare']($iter18_iter,false);
+			while (typeof($p['__wrapped_next']($iter18_nextval).$nextval) != 'undefined') {
+				f = $iter18_nextval.$nextval;
+				$iter19_iter = '18';
+				$iter19_nextval=$p['__iter_prepare']($iter19_iter,false);
+				while (typeof($p['__wrapped_next']($iter19_nextval).$nextval) != 'undefined') {
+					r = $iter19_nextval.$nextval;
+					cell = $p['__op_add']($add51=f,$add52=r);
+					if ($p['bool'](($p['cmp']($p['len'](teststate.__getitem__(cell)), 0) == 1))) {
+						cellpiece = $p['getattr'](self, 'pieces').__getitem__(teststate.__getitem__(cell).__getitem__($p['__op_sub']($sub7=$p['len'](teststate.__getitem__(cell)),$sub8=1)));
+						if ($p['bool'](($p['bool']($and22=$p['op_eq']($p['getattr'](cellpiece, '$$name'), 'p'))?$p['op_eq']($p['getattr'](cellpiece, 'player'), rplayer.__getitem__(r)):$and22))) {
+							event['append']('pawnup');
+							event_args['append']($p['getattr'](cellpiece, 'ID'));
+						}
+					}
+				}
+			}
 			return $p['tuple']([isLegal, event, event_args]);
 		}
 	, 1, [null,null,['self'],['teststate']]);
 		$cls_definition['isLegalState'] = $method;
+		$method = $pyjs__bind_method2('doEvent', function(event, args) {
+			if (this.__is_instance__ === true) {
+				var self = this;
+			} else {
+				var self = arguments[0];
+				event = arguments[1];
+				args = arguments[2];
+			}
+			var $iter20_iter,$iter20_nextval,$iter20_type,i,killed,$iter20_idx,$iter20_array;
+			$iter20_iter = $p['range']($p['len'](event));
+			$iter20_nextval=$p['__iter_prepare']($iter20_iter,false);
+			while (typeof($p['__wrapped_next']($iter20_nextval).$nextval) != 'undefined') {
+				i = $iter20_nextval.$nextval;
+				if ($p['bool']($p['op_eq'](event.__getitem__(i), 'capture'))) {
+					killed = $p['getattr'](self, 'state').__getitem__(args.__getitem__(i))['pop'](0);
+					$p['getattr'](self, 'pieces').__getitem__(killed).location = '';
+				}
+				else if ($p['bool']($p['op_eq'](event.__getitem__(i), 'pawnup'))) {
+					$p['getattr'](self, 'pieces').__getitem__(args.__getitem__(i)).$$name = 'Q';
+				}
+			}
+			return true;
+		}
+	, 1, [null,null,['self'],['event'],['args']]);
+		$cls_definition['doEvent'] = $method;
 		$method = $pyjs__bind_method2('whichCell', function(x, y) {
 			if (this.__is_instance__ === true) {
 				var self = this;
@@ -411,12 +466,12 @@ $pyjs.loaded_modules['chess'] = function (__mod_name__) {
 				x = arguments[1];
 				y = arguments[2];
 			}
-			var files,$add51,$add52,ranks,$mul4,$mul3,$mul2,$mul1;
+			var files,$add53,$add54,ranks,$mul4,$mul3,$mul2,$mul1;
 			files = 'abcdefgh';
 			ranks = '87654321';
-			return $p['__op_add']($add51=files.__getitem__($p['float_int']((typeof ($mul1=x)==typeof ($mul2=8) && typeof $mul1=='number'?
+			return $p['__op_add']($add53=files.__getitem__($p['float_int']((typeof ($mul1=x)==typeof ($mul2=8) && typeof $mul1=='number'?
 				$mul1*$mul2:
-				$p['op_mul']($mul1,$mul2)))),$add52=ranks.__getitem__($p['float_int']((typeof ($mul3=y)==typeof ($mul4=8) && typeof $mul3=='number'?
+				$p['op_mul']($mul1,$mul2)))),$add54=ranks.__getitem__($p['float_int']((typeof ($mul3=y)==typeof ($mul4=8) && typeof $mul3=='number'?
 				$mul3*$mul4:
 				$p['op_mul']($mul3,$mul4)))));
 		}

@@ -75,7 +75,16 @@ class GameCanvas(GWTCanvas):
         images (list):  Location of gamepiece images (relative URL)
         img_dict (list):  Dictionary of image handles for each player [player] = {piece.name: handle}
         game (Boardgame object):  The active game in this canvas
-        
+
+    Note:
+        It's worth thinking about making this an AbsolutePanel that incorporates
+        two or three independent Canvases.  This will enable easy, independent
+        modification of the board, pieces, and selection (or animation).  For
+        example, moving a piece currently requires redrawing the origin square to
+        erase the old piece image.  Having pieces that are larger than the squares
+        they are on would require redrawing the entire board every turn
+        (of course, for general forward-compatibility, that's not a terrible idea,
+        and it probably doesn't take noticably longer to execute.)
     """
     
     def __init__(self, w, h, game):
@@ -106,9 +115,9 @@ class GameCanvas(GWTCanvas):
         
 
     def reset(self, game):
-        """Redraw the board and initialize the pieces"""
+        """Redraw the board and the pieces"""
         self.drawBoard(game)
-        self.initPieces(game)
+        self.drawPieces(game)
 
     def drawBoard(self, game):
         """Draw all cells in the board"""
@@ -159,10 +168,13 @@ class GameCanvas(GWTCanvas):
     def drawSelection(self, gamecell):
         """Draw a selection around the stated cell"""
         self.drawCellPath(gamecell)
-        self.setStrokeStyle(SELECT)
-        self.stroke()
+        #self.setStrokeStyle(SELECT)
+        #self.setLineWidth(1)
+        #self.stroke()
+        self.setFillStyle(SELECT)
+        self.fill()
 
-    def initPieces(self, game):
+    def drawPieces(self, game):
         """Draw all pieces on their position in state"""
         #Window.alert("Drawing Pieces")
         for i in game.board.keys():
@@ -249,13 +261,8 @@ class GamePlayer(DockPanel):
 
     def GUImove(self, piece, cell):
         """Execute a move in the game; redraw the board"""
-        origcell = piece.location
         didMove = self.game.make_move(piece, cell)
-        if didMove:
-            self.GC.drawCell(self.game.board[origcell], COLORS)
-            for j in self.game.state[origcell]:
-                self.GC.drawPiece(self.game.pieces[j], self.game.board[origcell])
-            self.GC.drawPiece(piece, cell)
+        self.GC.reset(self.game)
                     
 
     def onMouseUp(self, sender, x, y):
@@ -275,17 +282,19 @@ class GamePlayer(DockPanel):
         #If this cell is selected, unselect this cell
         elif self.selectedCell[0]==clickcell:
             self.selectedCell.remove(clickcell)
-            self.GC.drawCell(self.game.board[clickcell], COLORS)
-            for j in self.game.state[clickcell]:
-                self.GC.drawPiece(self.game.pieces[j], self.game.board[clickcell])
+
         #If another cell is selected, query piece on that cell, call GUImove, clear selected
         else:
             piecelist = self.game.state[self.selectedCell.pop()]
             piece = self.game.pieces[piecelist[len(piecelist)-1]]
             cell = self.game.board[clickcell]
             self.GUImove(piece, cell)
+
+        self.GC.reset(self.game)
         for i in self.selectedCell:
             self.GC.drawSelection(self.game.board[i])
+            for j in self.game.state[i]:
+                self.GC.drawPiece(self.game.pieces[j], self.game.board[i])
         
     def onClick(self,sender):
         """Call function for the text/button-based move controller"""
